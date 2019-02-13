@@ -14,6 +14,17 @@ pip install pymysql
 
 ## Development
 
+#### Contributing
+
+Please, make sure to use commitizen to commit your messages.
+If you don't have commitizen installed:
+```
+pip install commitizen
+```
+To commit, instead of `git commit -m` use `cz commit`.
+For more information, [read here.](https://compbiocore.github.io/cbc-documentation-templates/semantic_release/)
+
+
 #### Start MySQL Server
 ```
 docker-compose up
