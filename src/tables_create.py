@@ -17,26 +17,33 @@ samplemeta = Table('samplemeta', metadata,
     Column('sample_id', Integer, primary_key=True),
     Column('sample_name', String(50), nullable=False),
     Column('file_type', String(50)),
-    Column('encoding', String(50)),
-    Column('poor_quality', Integer),
-    Column('seq_length', Integer),
-    Column('percent_gc', Float)
+    Column('encoding', String(50))
+    Column('library', String(100))
 )
 
 # Adapter count
 adptcontent = Table('adaptcontent', metadata,
     Column('_id', Integer, primary_key=True),
     Column('sample_id', Integer, ForeignKey('samplemeta.sample_id')),
-    Column('adapter', String(100), nullable=False),
-    Column('count', Integer, nullable=False)
+    Column('adapter', String(100)),
+    Column('count', Integer)
 )
 
 # GC Content table
 gccontent = Table('gccontent', metadata,
     Column('_id', Integer, primary_key=True),
     Column('sample_id', Integer, ForeignKey('samplemeta.sample_id')),
-    Column('frequency', Integer),
-    Column('mean_gc', Integer)
+    Column('read', Integer),
+    Column('mean_GC', Integer)
+)
+
+# kmer count table
+kmercount = Table('kmercount', metadata,
+    Column('_id', Integer, primary_key=True),
+    Column('sample_id', Integer, ForeignKey('samplemeta.sample_id')),
+    Column('kmer', String(100)),
+    Column('position', Integer),
+    Column('count', Integer)
 )
 
 #Overrepresented Kmers table
@@ -49,12 +56,12 @@ overkmer = Table('overkmer', metadata,
     Column('kmer', String(20))
 )
 
-#Overrepresented Sequences
-overseq = Table('overseq', metadata,
+#Overrepresented reads
+overreads = Table('overreads', metadata,
     Column('_id', Integer, primary_key=True),
     Column('sample_id', Integer, ForeignKey('samplemeta.sample_id')),
-    Column('sequence', String(200), nullable=False),
-    Column('count', Integer, nullable=False)
+    Column('read_sequence', String(200)),
+    Column('count', Integer)
 )
 
 # Per base quality
@@ -69,16 +76,32 @@ basequal = Table('basequal', metadata,
     Column('q90', Integer)
 )
 
-# Sequence Content
-seqcontent = Table('seqcontent', metadata,
+# Per read quality
+readqual = Table('readqual', metadata,
+    Column('_id', Integer, primary_key=True),
+    Column('sample_id', Integer, ForeignKey('samplemeta.sample_id')),
+    Column('read', Integer),
+    Column('sequence_mean', Float)
+)
+
+# Read Content
+readcontent = Table('readcontent', metadata,
     Column('_id', Integer, primary_key=True),
     Column('sample_id', Integer, ForeignKey('samplemeta.sample_id')),
     Column('position', Integer, nullable=False),
-    Column('scA', Integer),
-    Column('scT', Integer),
-    Column('scC', Integer),
-    Column('scG', Integer),
-    Column('scN', Integer),
+    Column('a', Integer),
+    Column('c', Integer),
+    Column('t', Integer),
+    Column('g', Integer),
+    Column('n', Integer),
+)
+
+# Read length
+readlength = Table('readlength', metadata,
+    Column('_id', Integer, primary_key=True),
+    Column('sample_id', Integer, ForeignKey('samplemeta.sample_id')),
+    Column('read_length', Integer),
+    Column('num_reads', Integer)
 )
 
 metadata.create_all(conn, checkfirst=True)
