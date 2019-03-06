@@ -23,6 +23,7 @@ def insert_(connection, table, values):
     conn.execute(ins)
 
 
+insert_(conn, 'samplemeta', {'sample_id': 1, 'sample_name': "test", 'file_type': 'test', 'encoding': 'Illumina1.8'})
 insert_(conn, 'gccontent', {'sample_id': 1, 'frequency': 10, 'mean_gc': 100})
 
 # insert_(conn, 'samplemeta', {'sample_name': 'testsample1',

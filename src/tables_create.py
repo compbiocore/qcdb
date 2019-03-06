@@ -18,7 +18,6 @@ samplemeta = Table('samplemeta', metadata,
     Column('sample_name', String(50), nullable=False),
     Column('file_type', String(50)),
     Column('encoding', String(50))
-    Column('library', String(100))
 )
 
 # Adapter count
