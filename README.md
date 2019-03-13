@@ -47,7 +47,28 @@ python src/db_create.py
 python src/tables_create.py
 ```
 
-#### Insert Data
+#### Load Data
+Create a `params.yaml` file like the example below:
+```yaml
+db:
+  name: qcdb
+  params:
+    host: 0.0.0.0
+    port: 3306
+    user: root
+    password: password
+files:
+  directory: data/qcdb_test_files
+  data:
+    - name: adapter_content # this is the suffix of the file that qckitfastq outputs, without .csv
+      table: adaptcontent # this is the name of the table in the database
+    - name: gc_content
+      table: gccontent
+      columns: # columns from the file you want to keep on the table in database.
+        - read
+        - mean_GC
 ```
-python src/insert.py
+
+```
+python src/db_load.py -f path/to/params.yaml
 ```

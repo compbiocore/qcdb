@@ -8,12 +8,12 @@ def connection(params={'user':'root',
                       },
                db=False):
 
-    str = 'mysql+pymysql://{0}:{1}@{2}:{3}'.format(params['user'],
+    str_ = 'mysql+pymysql://{0}:{1}@{2}:{3}'.format(params['user'],
                                            params['password'],
                                            params['host'],
                                            params['port'])
     if db:
-        str = '{0}/{1}'.format(str, db)
+        str_ = '{0}/{1}'.format(str_, db)
 
-    engine = create_engine(str)
+    engine = create_engine(str_)
     return engine.connect()

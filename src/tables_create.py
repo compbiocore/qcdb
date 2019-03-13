@@ -14,16 +14,16 @@ metadata = MetaData()
 
 # Sample metadata table
 samplemeta = Table('samplemeta', metadata,
-    Column('sample_id', Integer, primary_key=True),
+    Column('sample_id', String(50), primary_key=True),
     Column('sample_name', String(50), nullable=False),
-    Column('file_type', String(50)),
-    Column('encoding', String(50))
+    Column('library_read_type', String(50)),
+    Column('experiment', String(50))
 )
 
 # Adapter count
 adptcontent = Table('adaptcontent', metadata,
     Column('_id', Integer, primary_key=True),
-    Column('sample_id', Integer, ForeignKey('samplemeta.sample_id')),
+    Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
     Column('adapter', String(100)),
     Column('count', Integer)
 )
@@ -31,7 +31,7 @@ adptcontent = Table('adaptcontent', metadata,
 # GC Content table
 gccontent = Table('gccontent', metadata,
     Column('_id', Integer, primary_key=True),
-    Column('sample_id', Integer, ForeignKey('samplemeta.sample_id')),
+    Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
     Column('read', Integer),
     Column('mean_GC', Integer)
 )
@@ -39,7 +39,7 @@ gccontent = Table('gccontent', metadata,
 # kmer count table
 kmercount = Table('kmercount', metadata,
     Column('_id', Integer, primary_key=True),
-    Column('sample_id', Integer, ForeignKey('samplemeta.sample_id')),
+    Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
     Column('kmer', String(100)),
     Column('position', Integer),
     Column('count', Integer)
@@ -48,7 +48,7 @@ kmercount = Table('kmercount', metadata,
 #Overrepresented Kmers table
 overkmer = Table('overkmer', metadata,
     Column('_id', Integer, primary_key=True),
-    Column('sample_id', Integer, ForeignKey('samplemeta.sample_id')),
+    Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
     Column('row', Integer),
     Column('position', Integer),
     Column('obsexp_ratio', Float),
@@ -58,7 +58,7 @@ overkmer = Table('overkmer', metadata,
 #Overrepresented reads
 overreads = Table('overreads', metadata,
     Column('_id', Integer, primary_key=True),
-    Column('sample_id', Integer, ForeignKey('samplemeta.sample_id')),
+    Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
     Column('read_sequence', String(200)),
     Column('count', Integer)
 )
@@ -66,7 +66,7 @@ overreads = Table('overreads', metadata,
 # Per base quality
 basequal = Table('basequal', metadata,
     Column('_id', Integer, primary_key=True),
-    Column('sample_id', Integer, ForeignKey('samplemeta.sample_id')),
+    Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
     Column('position', Integer, nullable=False),
     Column('q10', Integer),
     Column('q25', Integer),
@@ -78,7 +78,7 @@ basequal = Table('basequal', metadata,
 # Per read quality
 readqual = Table('readqual', metadata,
     Column('_id', Integer, primary_key=True),
-    Column('sample_id', Integer, ForeignKey('samplemeta.sample_id')),
+    Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
     Column('read', Integer),
     Column('sequence_mean', Float)
 )
@@ -86,7 +86,7 @@ readqual = Table('readqual', metadata,
 # Read Content
 readcontent = Table('readcontent', metadata,
     Column('_id', Integer, primary_key=True),
-    Column('sample_id', Integer, ForeignKey('samplemeta.sample_id')),
+    Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
     Column('position', Integer, nullable=False),
     Column('a', Integer),
     Column('c', Integer),
@@ -98,7 +98,7 @@ readcontent = Table('readcontent', metadata,
 # Read length
 readlength = Table('readlength', metadata,
     Column('_id', Integer, primary_key=True),
-    Column('sample_id', Integer, ForeignKey('samplemeta.sample_id')),
+    Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
     Column('read_length', Integer),
     Column('num_reads', Integer)
 )
