@@ -10,7 +10,7 @@ from sqlalchemy import *
 def qckitfastq_create(metadata):
 
     # Adapter count
-    adptcontent = Table('adaptcontent', metadata,
+    adptcontent = Table('qckitfastq_adaptcontent', metadata,
         Column('_id', Integer, primary_key=True),
         Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
         Column('adapter', String(100)),
@@ -18,7 +18,7 @@ def qckitfastq_create(metadata):
     )
 
     # GC Content table
-    gccontent = Table('gccontent', metadata,
+    gccontent = Table('qckitfastq_gccontent', metadata,
         Column('_id', Integer, primary_key=True),
         Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
         Column('read', Integer),
@@ -26,7 +26,7 @@ def qckitfastq_create(metadata):
     )
 
     # kmer count table
-    kmercount = Table('kmercount', metadata,
+    kmercount = Table('qckitfastq_kmercount', metadata,
         Column('_id', Integer, primary_key=True),
         Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
         Column('kmer', String(100)),
@@ -35,7 +35,7 @@ def qckitfastq_create(metadata):
     )
 
     #Overrepresented Kmers table
-    overkmer = Table('overkmer', metadata,
+    overkmer = Table('qckitfastq_overkmer', metadata,
         Column('_id', Integer, primary_key=True),
         Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
         Column('row', Integer),
@@ -45,7 +45,7 @@ def qckitfastq_create(metadata):
     )
 
     #Overrepresented reads
-    overreads = Table('overreads', metadata,
+    overreads = Table('qckitfastq_overreads', metadata,
         Column('_id', Integer, primary_key=True),
         Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
         Column('read_sequence', String(200)),
@@ -53,7 +53,7 @@ def qckitfastq_create(metadata):
     )
 
     # Per base quality
-    basequal = Table('basequal', metadata,
+    basequal = Table('qckitfastq_basequal', metadata,
         Column('_id', Integer, primary_key=True),
         Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
         Column('position', Integer, nullable=False),
@@ -65,7 +65,7 @@ def qckitfastq_create(metadata):
     )
 
     # Per read quality
-    readqual = Table('readqual', metadata,
+    readqual = Table('qckitfastq_readqual', metadata,
         Column('_id', Integer, primary_key=True),
         Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
         Column('read', Integer),
@@ -73,7 +73,7 @@ def qckitfastq_create(metadata):
     )
 
     # Read Content
-    readcontent = Table('readcontent', metadata,
+    readcontent = Table('qckitfastq_readcontent', metadata,
         Column('_id', Integer, primary_key=True),
         Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
         Column('position', Integer, nullable=False),
@@ -85,7 +85,7 @@ def qckitfastq_create(metadata):
     )
 
     # Read length
-    readlength = Table('readlength', metadata,
+    readlength = Table('qckitfastq_readlength', metadata,
         Column('_id', Integer, primary_key=True),
         Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
         Column('read_length', Integer),

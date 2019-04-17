@@ -25,7 +25,7 @@ def fastqc_create(metadata):
     )
 
     # Per sequence quality (equivalent to qckitfastq readqual)
-    fastqc_seqqual = Table('seqqual', metadata,
+    fastqc_seqqual = Table('fastqc_seqqual', metadata,
         Column('_id', Integer, primary_key=True),
         Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
         Column('quality', Integer),
