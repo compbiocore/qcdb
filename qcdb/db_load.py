@@ -30,15 +30,19 @@ def main(config):
     for module in d['files']['module']:
         log.info("Loading metadata for {} ...".format(module['name']))
         directory = module['directory']
-        mdata = metadata(directory)
-        mdata.to_sql(con=conn,
-            name='samplemeta',
-            index=False,
-            if_exists='append')
+        #mdata = metadata(directory)
+        #mdata.to_sql(con=conn,
+        #    name='samplemeta',
+        #    index=False,
+        #    if_exists='append')
 
         try:
-            function = module+"Parser"
-            function(directory)
+            if module['name'] == 'fastqc':
+                fastqcParser(directory)
+            elif module['name'] == 'qckitfastq':
+                qckitfastqParser(directory)
+        except:
+            log.info("Error in parsing...")
 
     # parse and load content
 #    for entry in d['files']['data']:

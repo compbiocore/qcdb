@@ -1,13 +1,17 @@
 import pandas as pd
 import glob2
 import os
+from collections import defaultdict
 
 class BaseParser:
 
-    def __init__(self, name='base',anchor='base')
-        self.name = name
-        self.module_names = None
-        self.parsed_results = None
+# structure of insert statements is a list of dictionaries
+# so we will have a dictionary of a list of dictionaries
+# i.e. fastqc_adaptcontent: [{_id: 1, position: 1}, {_id: 1, position: 2}]
+
+    def __init__(self, file_handle)
+        self.tables = defaultdict(list)
+        self.metadata = metadata(file_handle)
         self.infile = file_handle
 
     def get_metadata(base_file):
@@ -55,20 +59,3 @@ class BaseParser:
             metadata_df = metadata_df.append(row)
 
         return metadata_df.drop_duplicates()
-
-    # data parse
-    def parse(directory, file_suffix, columns=False):
-        files = glob2.glob(os.path.join(directory, '*{}.csv'.format(file_suffix)))
-        df = pd.DataFrame()
-
-        for file in files:
-            base_file = os.path.basename(file)
-            data = pd.read_table(file, sep=',')
-            if columns:
-                data = data[columns]
-
-            data['sample_id'] = sample_id(base_file)
-
-            df = df.append(data, ignore_index=True)
-
-        return(df)
