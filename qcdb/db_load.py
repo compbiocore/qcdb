@@ -36,13 +36,19 @@ def main(config):
         #    index=False,
         #    if_exists='append')
 
+        results = ''
         try:
             if module['name'] == 'fastqc':
-                fastqcParser(directory)
+                results = fastqcParser(directory)
             elif module['name'] == 'qckitfastq':
-                qckitfastqParser(directory)
+                results = qckitfastqParser(directory)
         except:
             log.info("Error in parsing...")
+
+        for k, v in results.tables.values():
+            log.info("Loading {} ...".format(k))
+
+            results.
 
     # parse and load content
 #    for entry in d['files']['data']:

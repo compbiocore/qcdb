@@ -22,6 +22,15 @@ def metadata():
 
 	return metadata
 
+# Tests that the start of each table name should either be
+# samplemeta, qckitfastq, or fastqc
+def test_tables_all_prepended(metadata):
+	tables = metadata.tables.keys()
+	modules = set()
+	for t in tables:
+		modules.add(t.split('_')[0])
+	assert(len(modules)==3)
+
 @pytest.fixture(scope='session')
 def connection(request, tmpdir_factory, metadata):
 	#engine = create_engine('mysql+pymysql://root:password@0.0.0.0:3306/qcdb')
@@ -33,15 +42,6 @@ def connection(request, tmpdir_factory, metadata):
 	# this finalizer for dropping the tables isn't working, not sure why
 	#request.addfinalizer(metadata.drop_all(engine))
 	return connection
-
-# Tests that the start of each table name should either be
-# samplemeta, qckitfastq, or fastqc
-def test_tables_all_prepended(metadata):
-	tables = metadata.tables.keys()
-	modules = set()
-	for t in tables:
-		modules.add(t.split('_')[0])
-	assert(len(modules)==3)
 
 @pytest.fixture(scope='function')
 def session(connection, request):
@@ -58,10 +58,6 @@ def session(connection, request):
 
 	request.addfinalizer(teardown)
 	return session
-
-def test_fastqc_parse():
-	#run fastqc parse
-	#make sure data is in correct format
 
 def test_db_load(session):
 	#main("testdata/test.yaml")
