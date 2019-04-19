@@ -6,59 +6,14 @@ db:
     user: root
     password: password
 files:
-  module:
-    - name: fastqc
-    - directory: ~/CORE/qckit/testdata/qcdb_test
-  module:
-    - name: picardtools
-    - directory: directory for picardtools results
+#  module:
+  #   - name: fastqc
+  #   - directory: ~/CORE/qckit/testdata/qcdb_test
+  # module:
+  #   - name: picardtools
+  #   - directory: directory for picardtools results
   module:
     - name: qckitfastq
-    - directory: data/qcdb_test_files
-    - data:
-      - name: adapter_content
-        table: adaptcontent
-      - name: gc_content
-        table: gccontent
-        columns:
-          - read
-          - mean_GC
-      - name: kmer_count
-        table: kmercount
-      - name: overrep_kmer
-        table: overkmer
-        columns:
-          - row
-          - position
-          - obsexp_ratio
-          - kmer
-      - name: overrep_reads
-        table: overreads
-      - name: per_base_quality
-        table: basequal
-        columns:
-          - position
-          - "q10"
-          - "q25"
-          - median
-          - "q75"
-          - "q90"
-      - name: pre_read_quality
-        table: readqual
-        columns:
-          - read
-          - sequence_mean
-      - name: read_content
-        table: readcontent
-        columns:
-          - position
-          - a
-          - c
-          - t
-          - g
-          - n
-      - name: read_length
-        table: readlength
-        columns:
-          - read_length
-          - num_reads
+      directory: /Users/aguang/CORE/qckit/testdata/qcdb_test/qckitfastq_test
+      metadata:
+        

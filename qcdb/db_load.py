@@ -1,19 +1,30 @@
 from sqlalchemy import *
+from sqlalchemy.orm import Session
 from connection import connection
-from parse import *
 import oyaml as yaml
 import os
 import pandas as pd
 import argparse
 import logging
+import sys
+from parsers.qckitfastq_parse import qckitfastqParser
+from parsers.fastqc_parse import fastqcParser
+from parsers.parse import BaseParser
 
 # Initialize the logger
-log = logging.getLogger(__name__)
+log = logging.getLogger()
+handler = logging.StreamHandler()
+handler.setFormatter(
+    logging.Formatter('%(asctime)s %(levelname)s: %(message)s'))
+handler.setLevel(logging.INFO)
+log.addHandler(handler)
+log.setLevel(logging.INFO)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--file', '-f', help='Location of params.yaml')
 
 def main(config):
+    print(sys.path)
     # Load load.yaml file
     with open(config, 'r') as io:
         d = yaml.load(io)
@@ -25,6 +36,7 @@ def main(config):
     log.info("Connected to {0}:{1}:{2}".format(params['host'],
                                             params['port'],
                                             db))
+    session = Session(bind=conn)
 
     # parse and load metadata
     for module in d['files']['module']:
@@ -43,12 +55,11 @@ def main(config):
             elif module['name'] == 'qckitfastq':
                 results = qckitfastqParser(directory)
         except:
-            log.info("Error in parsing...")
+            log.error("Error in parsing...")
 
-        for k, v in results.tables.values():
+        for k, v in results.tables.items():
             log.info("Loading {} ...".format(k))
-
-            results.
+            session.bulk_insert_mappings(k, v)
 
     # parse and load content
 #    for entry in d['files']['data']:

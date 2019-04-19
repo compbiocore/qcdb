@@ -1,18 +1,21 @@
 import pandas as pd
 import glob2
 import os
+import logging
 from collections import defaultdict
 
-class BaseParser:
+log = logging.getLogger(__name__)
 
+class BaseParser(object):
 # structure of insert statements is a list of dictionaries
 # so we will have a dictionary of a list of dictionaries
 # i.e. fastqc_adaptcontent: [{_id: 1, position: 1}, {_id: 1, position: 2}]
 
-    def __init__(self, file_handle)
+    def __init__(self, file_handle):
         self.tables = defaultdict(list)
-        self.metadata = metadata(file_handle)
         self.infile = file_handle
+        #self.metadata = metadata(file_handle)
+        #log.info("metadata works")
 
     def get_metadata(base_file):
         sample=base_file.split('_')[0]
