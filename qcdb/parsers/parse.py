@@ -13,30 +13,29 @@ class BaseParser(object):
 
     def __init__(self, file_handle):
         self.tables = defaultdict(list)
-        self.infile = file_handle
-        #self.metadata = metadata(file_handle)
-        #log.info("metadata works")
+        base_file = os.path.basename(file_handle)
+        sample, experiment, library_read_type = self.get_metadata(base_file)
+        self.sample_id = self.sample_id(sample, experiment, library_read_type)
+        self.sample_name = sample
+        self.experiment = experiment
+        self.library_read_type = self.get_library_read_type(library_read_type)
 
-    def get_metadata(base_file):
+    def get_metadata(self, base_file):
         sample=base_file.split('_')[0]
         experiment=base_file.split('_')[1]
         library_read_type=base_file.split('_')[2]
+        if library_read_type[0].isalpha(): # single-end
+            library_read_type = 'se'
 
         return (sample,
                 experiment,
                 library_read_type)
 
-    def sample_id(base_file):
-        sample, experiment, library_read_type = get_metadata(base_file)
-        if library_read_type.isalpha():
-            library_read_type =  'se'
+    def sample_id(self, sample, experiment, library_read_type):
         return(sample+'_'+experiment+'_'+library_read_type)
 
 
-    def get_library_read_type(base_file):
-
-        sample, experiment, library_read_type = get_metadata(base_file)
-
+    def get_library_read_type(self, library_read_type):
         if library_read_type == '1':
             return 'paired-end forward'
         if library_read_type == '2':
@@ -45,18 +44,20 @@ class BaseParser(object):
             return 'single ended'
 
     # create metadata table
-    def metadata(directory):
+    def metadata(self, directory):
+        print("directory")
         files = glob2.glob(os.path.join(directory, '*'))
+        log.info("files: {}".format(files))
         metadata_df = pd.DataFrame()
         for f in files:
             base_file = os.path.basename(f)
 
-            sample, experiment, library_read_type = get_metadata(base_file)
-            _id = sample_id(base_file)
+            sample, experiment, library_read_type = self.get_metadata(base_file)
+            _id = self.sample_id(sample, experiment, library_read_type)
 
             row = pd.DataFrame({'sample_id': _id,
                                  'sample_name': sample,
-                                 'library_read_type': get_library_read_type(base_file),
+                                 'library_read_type': self.get_library_read_type(base_file),
                                  'experiment': experiment}, index=[0])
 
             metadata_df = metadata_df.append(row)

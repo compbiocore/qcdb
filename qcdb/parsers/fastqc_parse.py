@@ -3,24 +3,32 @@ import glob2
 import os
 import zipfile as zf, re
 import logging
+import oyaml as yaml
+from io import BytesIO
 from parsers.parse import BaseParser
 
-class fastqcParser(BaseParser):
-    def __init__(self, infile):
-        super(FASTQCParser, self).__init__(name='FASTQC')
+log = logging.getLogger(__name__)
 
-        self.parse(directory, name)
+class fastqcParser(BaseParser):
+    def __init__(self, file_handle):
+        log.info("Initializing fastqcParser...")
+        BaseParser.__init__(self,file_handle)
+
+        with open('tables/fastqc.yaml', 'r') as io:
+            d = yaml.load(io)
+
+        self.parse(file_handle, d)
 
     # data parse
     # largely taken from: https://github.com/compbiocore/bioflows/blob/master/bioflows/bioutils/parse_fastqc/parsefastqc.py
-    def parse(self, directory, file, columns=False):
+    def parse(self, file, table_structure):
         '''
         read in the results in zipfile and return parsed file
         :return: list of output and tuple with location of modules
         '''
-        zp = zf.ZipFile(os.path.join(directory, file),'r')
+        zp = zf.ZipFile(file,'r')
         results_idx = next((i for i, item in enumerate(zp.namelist()) if re.search('fastqc_data.txt',item)), None)
-        self.parsed_results = zp.open(zp.namelist()[results_idx]).readlines()
+        lines = zp.open(zp.namelist()[results_idx]).readlines()
 
         # Generate a tuple for the start and end locs of the modules 12 in total
             # ['>>Basic Statistics\tpass\n',
@@ -36,17 +44,18 @@ class fastqcParser(BaseParser):
             #  '>>Adapter Content\tpass\n',
             #  '>>Kmer Content\tfail\n']
 
-        files = glob2.glob(os.path.join(directory, '*{}.csv'.format(file_suffix)))
-        df = pd.DataFrame()
+        module_start_idx = [i for i, item in enumerate(lines) if re.search('^>>', item.decode('utf-8'))]
+        module_end_idx = [i for i, item in enumerate(lines) if re.search('^>>END_MODULE', item.decode('utf-8'))]
+        module_start_idx = sorted(list(set(module_start_idx) - set(module_end_idx)))
 
-        for file in files:
-            base_file = os.path.basename(file)
-            data = pd.read_table(file, sep=',')
-            if columns:
-                data = data[columns]
-
-            data['sample_id'] = sample_id(base_file)
-
-            df = df.append(data, ignore_index=True)
-
-        return(df)
+        for start, end, module in zip(module_start_idx[1:], module_end_idx[1:], table_structure):
+            rows = lines[start+2:end-1]
+            table = module['table']
+            columns = [m['name'] for m in module['columns']]
+            b = BytesIO()
+            for r in rows:
+                b.write(r)
+            b.seek(0)
+            df = pd.read_csv(b, sep='\t', names=columns)
+            self.tables[module['table']] = df.to_dict(orient="records")
+#            self.tables[module['table']] = [dict(zip(columns, r.decode('utf-8').split('\t').strip('\n'))) for r in rows]

@@ -1,6 +1,7 @@
 from sqlalchemy import *
 from sqlalchemy.orm import Session
 from connection import connection
+import glob2
 import oyaml as yaml
 import os
 import pandas as pd
@@ -24,7 +25,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--file', '-f', help='Location of params.yaml')
 
 def main(config):
-    print(sys.path)
     # Load load.yaml file
     with open(config, 'r') as io:
         d = yaml.load(io)
@@ -48,18 +48,20 @@ def main(config):
         #    index=False,
         #    if_exists='append')
 
-        results = ''
         try:
             if module['name'] == 'fastqc':
-                results = fastqcParser(directory)
+                files = glob2.glob(os.path.join(directory, '*_fastqc.zip'))
+                if not files:
+                    log.error("No fastqc output found in: {}".format(directory))
+                for f in files:
+                    results = fastqcParser(f)
+                    for k,v in results.tables.items():
+                        log.info("Loading {} ...".format(k))
+                        session.bulk_insert_mappings(fastqc_basequal, v)
             elif module['name'] == 'qckitfastq':
                 results = qckitfastqParser(directory)
         except:
             log.error("Error in parsing...")
-
-        for k, v in results.tables.items():
-            log.info("Loading {} ...".format(k))
-            session.bulk_insert_mappings(k, v)
 
     # parse and load content
 #    for entry in d['files']['data']:
