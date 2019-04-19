@@ -6,14 +6,12 @@ db:
     user: root
     password: password
 files:
-#  module:
-  #   - name: fastqc
-  #   - directory: ~/CORE/qckit/testdata/qcdb_test
+  module:
+     - name: fastqc
+       directory: /Users/aguang/Dropbox (Brown)/qcdb_test_files/fastqc_bioflows
   # module:
   #   - name: picardtools
   #   - directory: directory for picardtools results
-  module:
-    - name: qckitfastq
-      directory: /Users/aguang/CORE/qckit/testdata/qcdb_test/qckitfastq_test
-      metadata:
-        
+  #module:
+  #  - name: qckitfastq
+  #    directory: /Users/aguang/CORE/qckit/testdata/qcdb_test/qckitfastq_test

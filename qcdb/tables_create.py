@@ -1,8 +1,11 @@
 from sqlalchemy import *
 from connection import connection
+from collections import OrderedDict
+import oyaml as yaml
 import os
+import glob2
 from modules.qckitfastq.tables_create import qckitfastq_create
-from modules.fastqc.tables_create import fastqc_create
+
 
 # stub for turning table creation into a class
 #class TableCreate:
@@ -36,7 +39,26 @@ samplemeta = Table('samplemeta', metadata,
     Column('experiment', String(50))
 )
 
-qckitfastq_create(metadata)
-fastqc_create(metadata)
+# assuming our only types will be Integer, Float and String
+def sql_types(type_):
+    if type_ == 'Integer':
+        return Integer
+    elif type_ == 'Float':
+        return Float
+    else:
+        return String(int(type_.split('(')[1].strip(')')))
+
+
+files = glob2.glob('tables/*.yaml')
+for f in files:
+    with open(f, 'r') as io:
+        d = yaml.load(io)
+    for t in d:
+    	Table(t['table'], metadata, 
+    		Column('_id', Integer, primary_key=True),
+    		Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
+    		*(Column(name=x['name'],type_=sql_types(x['type'])) for x in t['columns']))
+
+qckitfastqc_create(metadata)
 
 metadata.create_all(conn, checkfirst=True)
