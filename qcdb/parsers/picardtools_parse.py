@@ -17,7 +17,7 @@ class picardParser(BaseParser):# specifying a picardparser class
         BaseParser.__init__(self, directory) #runs the BaseParser initializer which will fill in some fields
         
         
-    def alignmentmetrics_parse(directory):
+    def alignmentmetrics_parse(self, directory):
         dictionary_list = ()
         #directory_list = os.listdir(directory)
         directory_list = glob2.glob(os.path.join(directory, '*_alignment_metrics_picard.txt'))
@@ -40,7 +40,7 @@ class picardParser(BaseParser):# specifying a picardparser class
                 dictionary_list.append(dictionary)
         return(dictionary_list)
 
-    def insertmetrics_parse(directory):
+    def insertmetrics_parse(self, directory):
         dictionary_list = ()
         #directory_list = os.listdir(directory)
         directory_list = glob2.glob(os.path.join(directory, '*_insertsize_metrics_picard.txt'))
@@ -66,7 +66,7 @@ class picardParser(BaseParser):# specifying a picardparser class
                 dictionary_list.append(dictionary)
         return(dictionary_list)
                 
-    def parse_picard_GCBias_metrics(directory):
+    def parse_picard_GCBias_metrics(self, directory):
         dictionary_list = ()
         #directory_list = os.listdir(directory)
         directory_list = glob2.glob(os.path.join(directory, '*_gcbias_metrics_picard.txt'))
