@@ -22,6 +22,7 @@ class picardParser(BaseParser):# specifying a picardparser class
         #directory_list = os.listdir(directory)
         directory_list = glob2.glob(os.path.join(directory, '*_alignment_metrics_picard.txt'))
         for fname in directory_list: 
+            base_file = os.path.basename(fname)
             sample_id = self.sample_id(base_file)
             f = open(directory + os.sep + fname, 'r', encoding = "ISO-8859-1")
             contents = f.readlines()
@@ -44,7 +45,8 @@ class picardParser(BaseParser):# specifying a picardparser class
         dictionary_list = ()
         #directory_list = os.listdir(directory)
         directory_list = glob2.glob(os.path.join(directory, '*_insertsize_metrics_picard.txt'))
-        for fname in directory_list: 
+        for fname in directory_list:
+            base_file = os.path.basename(fname)
             sample_id = self.sample_id(base_file)
             f = open(directory + os.sep + fname, 'r', encoding = "ISO-8859-1")
             contents = f.readlines()
@@ -70,7 +72,8 @@ class picardParser(BaseParser):# specifying a picardparser class
         dictionary_list = ()
         #directory_list = os.listdir(directory)
         directory_list = glob2.glob(os.path.join(directory, '*_gcbias_metrics_picard.txt'))
-        for fname in directory_list: 
+        for fname in directory_list:
+            base_file = os.path.basename(fname)
             sample_id = self.sample_id(base_file)
             f = open(directory + os.sep + fname, 'r', encoding = "ISO-8859-1")
             contents = f.readlines()
