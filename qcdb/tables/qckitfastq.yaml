@@ -1,0 +1,84 @@
+- table: qckitfastq_basequal
+  columns:
+    - name: position
+      type: Integer
+    - name: q10
+      type: Float
+    - name: q25
+      type: Float
+    - name: median
+      type: Float
+    - name: q75
+      type: Float
+    - name: q90
+      type: Float
+- table: qckitfastq_readqual
+  columns:
+    - name: read
+      type: Integer
+    - name: sequence_mean
+      type: Float
+- table: qckitfastq_readcontent
+  columns:
+    - name: position
+      type: Integer
+    - name: a
+      type: Integer
+    - name: c
+      type: Integer
+    - name: t
+      type: Integer
+    - name: g
+      type: Integer
+    - name: n
+      type: Integer
+- table: qckitfastq_gccontent
+  columns:
+    - name: gc_content
+      type: Float
+    - name: count
+      type: Integer
+- table: qckitfastq_readlength
+  columns:
+    - name: read_length
+      type: Integer
+    - name: num_reads
+      type: Integer
+- table: qckitfastq_seqdup
+  columns:
+    - name: duplevel
+      type: String(50)
+    - name: percentdedup
+      type: Float
+    - name: percenttotal
+      type: Float
+- table: qckitfastq_overreads
+  columns:
+    - name: read_sequence
+      type: String(200)
+    - name: count
+      type: Integer
+- table: qckitfastq_adaptcontent
+  columns:
+    - name: adapter
+      type: String(100)
+    - name: count
+      type: Integer
+- table: qckitfastq_kmercount
+  columns:
+    - name: kmer
+      type: String(100)
+    - name: position
+      type: Integer
+    - name: count
+      type: Integer
+- table: qckitfastq_overkmer
+  columns:
+    - name: row
+      type: Integer
+    - name: position
+      type: Integer
+    - name: obsexp_ratio
+      type: Float
+    - name: kmer
+      type: String(20)

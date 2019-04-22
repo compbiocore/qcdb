@@ -1,0 +1,15 @@
+language: python
+os:
+  - linux
+sudo: false
+python:
+  - "3.6"
+
+script:
+  - python -m pytest --cov=./
+
+install:
+  - pip install codecov
+
+after_success:
+  - codecov

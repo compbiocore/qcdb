@@ -54,7 +54,6 @@ class BaseParser(object):
 
     # create metadata table
     def metadata(self, directory):
-        print("directory")
         files = glob2.glob(os.path.join(directory, '*'))
         log.info("files: {}".format(files))
         metadata_df = pd.DataFrame()

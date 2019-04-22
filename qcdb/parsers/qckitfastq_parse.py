@@ -2,7 +2,7 @@ import glob2
 import os
 import csv
 import logging
-from parsers.parse import BaseParser
+from qcdb.parsers.parse import BaseParser
 
 log = logging.getLogger(__name__)
 
@@ -18,6 +18,8 @@ class qckitfastqParser(BaseParser):
             'per_base_quality': 'qckitfastq_basequal', 'per_read_quality': 'qckitfastq_readqual',
             'read_length': 'qckitfastq_readlength'}
 
+        sample_id = self.sample_id(base_file)
+
         for name, table in file_table_dict.items():
             log.info("Parsing {} into {}...".format(name, table))
             self.parse(table, directory, name)
@@ -25,9 +27,6 @@ class qckitfastqParser(BaseParser):
     # data parse
     def parse(self, table, directory, file_suffix):
         files = glob2.glob(os.path.join(directory, '*{}.csv'.format(file_suffix)))
-
-        sample_id = self.sample_id(base_file)
-        print(sample_id)
         results = []
         for file in files:
             base_file = os.path.basename(file)
