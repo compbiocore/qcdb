@@ -7,7 +7,7 @@ python:
 
 install:
   - pip install -I pytest==3.6
-  - pip install --user codecov
+  - pip install codecov
   - pip install pytest-cov sqlalchemy glob2 oyaml pandas pymysql
 
 script:
