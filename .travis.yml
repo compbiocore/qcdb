@@ -7,7 +7,7 @@ python:
 
 install:
   - pip install -I pytest==3.6
-  - pip install pytest-cov
+  - pip install pytest-cov sqlalchemy glob2
 
 script:
   - python -m pytest --cov=./
