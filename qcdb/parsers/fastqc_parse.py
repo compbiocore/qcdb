@@ -12,7 +12,8 @@ log = logging.getLogger(__name__)
 class fastqcParser(BaseParser):
     def __init__(self, file_handle):
         log.info("Initializing fastqcParser...")
-        BaseParser.__init__(self,file_handle)
+        BaseParser.__init__(self,file_handle)#, 'tables/fastqc.yaml')
+        print(self.sample_id)
 
         with open('tables/fastqc.yaml', 'r') as io:
             d = yaml.load(io)
@@ -44,18 +45,28 @@ class fastqcParser(BaseParser):
             #  '>>Adapter Content\tpass\n',
             #  '>>Kmer Content\tfail\n']
 
-        module_start_idx = [i for i, item in enumerate(lines) if re.search('^>>', item.decode('utf-8'))]
+        module_start_idx = [i for i, item in enumerate(lines) if re.search('#', item.decode('utf-8'))]
+        del(module_start_idx[9])
+        print(module_start_idx)
         module_end_idx = [i for i, item in enumerate(lines) if re.search('^>>END_MODULE', item.decode('utf-8'))]
-        module_start_idx = sorted(list(set(module_start_idx) - set(module_end_idx)))
+#        module_start_idx = 
+        #module_start_idx = sorted(list(set(module_start_idx) - set(module_end_idx)))
 
-        for start, end, module in zip(module_start_idx[1:], module_end_idx[1:], table_structure):
-            rows = lines[start+2:end-1]
+        for start, end, module in zip(module_start_idx[2:], module_end_idx[1:], table_structure):
+            rows = lines[start+1:end-1]
+            print(start)
             table = module['table']
             columns = [m['name'] for m in module['columns']]
+            types = [self.change_type(m['type']) for m in module['columns']]
             b = BytesIO()
             for r in rows:
                 b.write(r)
+            log.info("did this work")
+            print(columns)
+            print(types)
+#            print(b.getvalue())
             b.seek(0)
-            df = pd.read_csv(b, sep='\t', names=columns)
+            df = pd.read_csv(b, sep='\t', names=columns, dtype=dict(zip(columns,types)))
+            df['sample_id'] = self.sample_id
             self.tables[module['table']] = df.to_dict(orient="records")
 #            self.tables[module['table']] = [dict(zip(columns, r.decode('utf-8').split('\t').strip('\n'))) for r in rows]

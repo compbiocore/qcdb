@@ -24,6 +24,15 @@ log.setLevel(logging.INFO)
 parser = argparse.ArgumentParser()
 parser.add_argument('--file', '-f', help='Location of params.yaml')
 
+def insert(results, m, session):
+    for k,v in results.tables.items():
+        log.info("Loading {} ...".format(k))
+        t = m.tables[k]
+        print(v[1:5])
+        session.execute(t.insert(),v[1:5])
+        print("executed")
+        session.commit()
+
 def main(config):
     # Load load.yaml file
     with open(config, 'r') as io:
@@ -37,6 +46,8 @@ def main(config):
                                             params['port'],
                                             db))
     session = Session(bind=conn)
+    m = MetaData()
+    m.reflect(bind=conn)
 
     # parse and load metadata
     for module in d['files']['module']:
@@ -55,11 +66,21 @@ def main(config):
                     log.error("No fastqc output found in: {}".format(directory))
                 for f in files:
                     results = fastqcParser(f)
-                    for k,v in results.tables.items():
-                        log.info("Loading {} ...".format(k))
-                        session.bulk_insert_mappings(fastqc_basequal, v)
+                    log.info("results were fine")
+                    #or k,v in results.tables.items():
+                    #    log.info("Loading {} ...".format(k))
+                        #t = m.tables[k]
+                        #session.execute(t.insert(),v)
+                        #session.commit()
+                    insert(results, m, session)
+                    t = m.tables['fastqc_basequal']
+                    test = [{'base': 1.0, 'mean': 32.0919987170987, 'median': 33.0, 'lower_quartile': 31.0, 'upper_quartile': 34.0, '10th_percentile': 30.0, '90th_percentile': 34.0}, {'base': 2.0, 'mean': 32.329207655386554, 'median': 34.0, 'lower_quartile': 31.0, 'upper_quartile': 34.0, '10th_percentile': 30.0, '90th_percentile': 34.0}]
+                    session.execute(t.insert(), test)
+                    session.commit()
+                   #insert(results, m, session)
             elif module['name'] == 'qckitfastq':
                 results = qckitfastqParser(directory)
+                insert(results, m, session)
         except:
             log.error("Error in parsing...")
 

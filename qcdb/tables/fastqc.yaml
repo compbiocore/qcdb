@@ -1,0 +1,104 @@
+- table: fastqc_basequal
+  columns:
+    - name: base
+      type: String(50)
+    - name: mean
+      type: Float
+    - name: median
+      type: Float
+    - name: lower_quartile
+      type: Float
+    - name: upper_quartile
+      type: Float
+    - name: 10th_percentile
+      type: Float
+    - name: 90th_percentile
+      type: Float
+- table: fastqc_tilequal
+  columns:
+    - name: tile
+      type: Integer
+    - name: base
+      type: String(50)
+    - name: mean
+      type: Float
+- table: fastqc_seqqual
+  columns:
+    - name: quality
+      type: Integer
+    - name: count
+      type: Integer
+- table: fastqc_perbaseseqcontent
+  columns:
+    - name: base
+      type: String(50)
+    - name: g
+      type: Float
+    - name: a
+      type: Float
+    - name: t
+      type: Float
+    - name: c
+      type: Float
+- table: fastqc_gccontent
+  columns:
+    - name: gc_content
+      type: Integer
+    - name: count
+      type: Float
+- table: fastqc_perbaseNcontent
+  columns:
+    - name: base
+      type: String(50)
+    - name: n
+      type: Float
+- table: fastqc_seqlength
+  columns:
+    - name: length
+      type: Integer
+    - name: count
+      type: Integer
+- table: fastqc_seqdup
+  columns:
+    - name: duplevel
+      type: String(50)
+    - name: percentdedup
+      type: Float
+    - name: percenttotal
+      type: Float
+- table: fastqc_overseqs
+  columns:
+    - name: sequence
+      type: String(200)
+    - name: count
+      type: Integer
+    - name: percentage
+      type: Float
+    - name: possiblesource
+      type: String(50)
+- table: fastqc_adaptcontent
+  columns:
+    - name: position
+      type: String(50)
+    - name: illumina_universal
+      type: Float
+    - name: illumina_smallRNA3
+      type: Float
+    - name: illumina_smallRNA5
+      type: Float
+    - name: nextera_transposase
+      type: Float
+    - name: solid_smallRNA
+      type: Float
+- table: fastqc_kmercount
+  columns:
+    - name: sequence
+      type: String(100)
+    - name: count
+      type: Integer
+    - name: pvalue
+      type: Float
+    - name: obsexp_max
+      type: Float
+    - name: position
+      type: String(50)

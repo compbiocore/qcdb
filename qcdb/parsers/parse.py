@@ -11,14 +11,23 @@ class BaseParser(object):
 # so we will have a dictionary of a list of dictionaries
 # i.e. fastqc_adaptcontent: [{_id: 1, position: 1}, {_id: 1, position: 2}]
 
-    def __init__(self, file_handle):
+    def __init__(self, file_handle):#, table_yaml):
         self.tables = defaultdict(list)
+        #self.yaml = table_yaml
         base_file = os.path.basename(file_handle)
         sample, experiment, library_read_type = self.get_metadata(base_file)
         self.sample_id = self.sample_id(sample, experiment, library_read_type)
         self.sample_name = sample
         self.experiment = experiment
         self.library_read_type = self.get_library_read_type(library_read_type)
+
+    def change_type(self, type_):
+        if type_ == 'Integer':
+            return int
+        if type_ == 'Float':
+            return float
+        else:
+            return str
 
     def get_metadata(self, base_file):
         sample=base_file.split('_')[0]

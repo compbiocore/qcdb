@@ -59,6 +59,6 @@ for f in files:
     		Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
     		*(Column(name=x['name'],type_=sql_types(x['type'])) for x in t['columns']))
 
-qckitfastqc_create(metadata)
+#qckitfastqc_create(metadata)
 
 metadata.create_all(conn, checkfirst=True)
