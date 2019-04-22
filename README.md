@@ -37,7 +37,7 @@ docker-compose exec db mysql -p
 Password: `password`
 
 #### Create database
-From another terminal window:
+Code will likely only run for Python 3+. From another terminal window:
 ```
 python qcdb/db_create.py
 ```

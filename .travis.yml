@@ -6,7 +6,8 @@ python:
   - "3.6"
 
 install:
-  - pip install pytest pytest-cov
+  - pip install -I pytest==3.6
+  - pip install pytest-cov
 
 script:
   - python -m pytest --cov=./
