@@ -1,3 +1,11 @@
+## Master
+
+[![Build Status](https://travis-ci.org/compbiocore/qcdb.svg?branch=master)](https://travis-ci.org/compbiocore/qcdb)
+
+## Devel
+
+[![Build Status](https://travis-ci.org/compbiocore/qcdb.svg?branch=devel)](https://travis-ci.org/compbiocore/qcdb)
+
 # QCDB Development
 
 ## Prerequisites
