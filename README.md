@@ -39,12 +39,12 @@ Password: `password`
 #### Create database
 From another terminal window:
 ```
-python src/db_create.py
+python qcdb/db_create.py
 ```
 
 #### Create tables
 ```
-python src/tables_create.py
+python qcdb/tables_create.py
 ```
 
 #### Load Data
@@ -58,17 +58,18 @@ db:
     user: root
     password: password
 files:
-  directory: data/qcdb_test_files
-  data:
-    - name: adapter_content # this is the suffix of the file that qckitfastq outputs, without .csv
-      table: adaptcontent # this is the name of the table in the database
-    - name: gc_content
-      table: gccontent
-      columns: # columns from the file you want to keep on the table in database.
-        - read
-        - mean_GC
+  module:
+    - name: fastqc
+    - directory: /Users/aguang/CORE/qckit/qcdb/tests/data
 ```
 
 ```
-python src/db_load.py -f path/to/params.yaml
+python -m qcdb.db_load.py -f path/to/params.yaml
+```
+
+#### Running tests
+
+From the top level of the `qcdb` directory, run:
+```
+python -m pytest
 ```
