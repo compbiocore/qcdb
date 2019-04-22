@@ -43,7 +43,7 @@ python qcdb/db_create.py
 
 #### Create tables
 ```
-python qcdb/tables_create.py
+python -m qcdb.tables_create
 ```
 
 #### Load Data

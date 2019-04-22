@@ -5,15 +5,6 @@ import oyaml as yaml
 import os
 import glob2
 
-# Set database name
-db = 'qcdb'
-
-# Start connection
-conn = connection(db=db)
-
-# Init metadata
-metadata = MetaData()
-
 dirname = os.path.dirname(__file__)
 
 # assuming our only types will be Integer, Float and String
@@ -46,5 +37,14 @@ def metadata_tables(metadata):
 
     return metadata
 
-metadata = metadata_tables(metadata)
-metadata.create_all(conn, checkfirst=True)
+def main():
+
+    # Set database name
+    db = 'qcdb'
+
+    # Start connection
+    conn = connection(db=db)
+
+    # Init metadata
+    metadata = metadata_tables(MetaData())
+    metadata.create_all(conn, checkfirst=True)
