@@ -7,11 +7,11 @@ db:
     password: password
 files:
   module:
-     - name: fastqc
-       directory: /Users/aguang/Dropbox (Brown)/qcdb_test_files/fastqc_bioflows
+  #   - name: fastqc
+  #     directory: /Users/aguang/Dropbox (Brown)/qcdb_test_files/fastqc_bioflows
   # module:
   #   - name: picardtools
   #   - directory: directory for picardtools results
-  #module:
-  #  - name: qckitfastq
-  #    directory: /Users/aguang/CORE/qckit/testdata/qcdb_test/qckitfastq_test
+  module:
+    - name: qckitfastq
+      directory: /Users/aguang/CORE/qckit/testdata/qcdb_test/qckitfastq_test

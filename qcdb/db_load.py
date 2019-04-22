@@ -43,6 +43,23 @@ def insert(results, m, session):
         session.execute(t.insert(),v)
         session.commit()
 
+# temporary solution to get file handles for
+# qckitfastqParser and picardToolsParser
+def split_helper(files):
+    unique_files = set()
+    for f in files:
+        base_file = os.path.basename(f)
+        dirname = os.path.dirname(f)
+        spl = base_file.split('_')
+        if spl[2][0].isalpha():
+            s = spl[:2]
+            s.append("se")
+            unique_files.add(os.path.join(dirname,"_".join(s)))
+        else:
+            s = spl[:3]
+            unique_files.add(os.path.join(dirname,"_".join(s)))
+    return unique_files
+
 # parse and load metadata
 def parse(d, m, session):
     # parse and load metadata
@@ -58,8 +75,12 @@ def parse(d, m, session):
                     results = fastqcParser(f)
                     insert(results, m, session)
             elif module['name'] == 'qckitfastq':
-                results = qckitfastqParser(directory)
-                insert(results, m, session)
+                files = split_helper(glob2.glob(os.path.join(directory, '*.csv')))
+                if not files:
+                    log.error("No qckitfastqc output found in: {}".format(directory))
+                for f in files:
+                    results = qckitfastqParser(f)
+                    insert(results, m, session)
         except:
             log.error("Error in parsing...")
 

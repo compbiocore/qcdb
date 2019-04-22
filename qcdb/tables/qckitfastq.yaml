@@ -44,14 +44,6 @@
       type: Integer
     - name: num_reads
       type: Integer
-- table: qckitfastq_seqdup
-  columns:
-    - name: duplevel
-      type: String(50)
-    - name: percentdedup
-      type: Float
-    - name: percenttotal
-      type: Float
 - table: qckitfastq_overreads
   columns:
     - name: read_sequence
