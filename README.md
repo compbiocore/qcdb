@@ -64,7 +64,7 @@ files:
 ```
 
 ```
-python -m qcdb.db_load.py -f path/to/params.yaml
+python -m qcdb.db_load -f path/to/params.yaml
 ```
 
 #### Running tests
