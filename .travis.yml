@@ -7,7 +7,7 @@ python:
 
 install:
   - pip install -I pytest==3.6
-  - pip install pytest-cov sqlalchemy glob2
+  - pip install pytest-cov sqlalchemy glob2 oyaml pandas
 
 script:
   - python -m pytest --cov=./

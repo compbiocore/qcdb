@@ -8,8 +8,7 @@
 
 #### Install dependencies
 ```
-pip install sqlalchemy
-pip install pymysql
+pip install sqlalchemy pymysql glob2 oyaml pandas
 ```
 
 ## Development
