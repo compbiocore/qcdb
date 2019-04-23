@@ -1,11 +1,20 @@
 from sqlalchemy import *
 from qcdb.connection import connection
 from collections import OrderedDict
+import logging
 import oyaml as yaml
 import os
 import glob2
 
 dirname = os.path.dirname(__file__)
+log = logging.getLogger()
+handler = logging.StreamHandler()
+handler.setFormatter(
+    logging.Formatter('%(asctime)s %(levelname)s: %(message)s'))
+handler.setLevel(logging.INFO)
+log.addHandler(handler)
+log.setLevel(logging.INFO)
+
 
 # assuming our only types will be Integer, Float and String
 def sql_types(type_):
@@ -46,5 +55,9 @@ def main():
     conn = connection(db=db)
 
     # Init metadata
+    log.info("Making tables...")
     metadata = metadata_tables(MetaData())
     metadata.create_all(conn, checkfirst=True)
+
+if __name__ == '__main__':
+    main()
