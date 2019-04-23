@@ -21,7 +21,7 @@ log.addHandler(handler)
 log.setLevel(logging.INFO)
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--file', '-f', help='Location of params.yaml')
+parser.add_argument('--file', '-f', help='Location of params.yaml', default='params.yaml')
 
 def insert(results, m, session):
     log.info("Loading metadata for {}...".format(results.sample_id))

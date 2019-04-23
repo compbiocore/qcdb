@@ -1,6 +1,7 @@
 from sqlalchemy import *
 from qcdb.connection import connection
 from collections import OrderedDict
+import argparse
 import logging
 import oyaml as yaml
 import os
@@ -15,6 +16,8 @@ handler.setLevel(logging.INFO)
 log.addHandler(handler)
 log.setLevel(logging.INFO)
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--file', '-f', help='Location of params.yaml', default='params.yaml')
 
 # assuming our only types will be Integer, Float and String
 def sql_types(type_):
@@ -46,13 +49,17 @@ def metadata_tables(metadata):
 
     return metadata
 
-def main():
+def main(config):
+
+    with open(config, 'r') as io:
+        d = yaml.load(io)
 
     # Set database name
-    db = 'qcdb'
+    db = d['db']['name']
+    params = d['db']['params']
 
     # Start connection
-    conn = connection(db=db)
+    conn = connection(params=params,db=db)
 
     # Init metadata
     log.info("Making tables...")
@@ -60,4 +67,6 @@ def main():
     metadata.create_all(conn, checkfirst=True)
 
 if __name__ == '__main__':
-    main()
+    args = parser.parse_args()
+    config = str(args.file)
+    main(config)
