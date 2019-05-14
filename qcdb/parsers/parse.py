@@ -50,7 +50,9 @@ class BaseParser(object):
         if library_read_type == '2':
             return 'paired-end reverse'
         if library_read_type.isalpha():
-            return 'single ended'
+            return 'single ended' 
+        else:
+            raise KeyError("Library read type not recognized.")
 
     # create metadata table
     def metadata(self, directory):
