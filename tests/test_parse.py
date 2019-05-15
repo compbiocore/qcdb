@@ -1,6 +1,7 @@
 import glob2
 import os
 import pytest
+import warnings
 from qcdb.parsers.parse import BaseParser
 from qcdb.parsers.fastqc_parse import fastqcParser
 
@@ -10,6 +11,17 @@ def test_library_read_type():
 	assert(BaseParser("SRS1_SRX2_a").library_read_type=='single ended')
 	with pytest.raises(KeyError):
 		BaseParser("SRS1_SRX2_3")
+
+def test_metadata(tmpdir):
+	with open(os.path.join(tmpdir, "SRS1_SRX2_1"),'w') as f:
+		f.write("a")
+	with open(os.path.join(tmpdir, "SRS1_SRX2_2"),'w') as f:
+		f.write("b")
+	with open(os.path.join(tmpdir, "SRS1_SRX2_1"),'w') as f:
+		f.write("duplicate")
+	with pytest.warns(Warning):
+		bp = BaseParser(os.path.join(tmpdir,"SRS1_SRX2_1"))
+		bp.metadata(tmpdir)
 
 def test_fastqcparser():
 	results = []

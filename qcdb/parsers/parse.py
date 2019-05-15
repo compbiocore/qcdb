@@ -52,24 +52,29 @@ class BaseParser(object):
         if library_read_type.isalpha():
             return 'single ended' 
         else:
-            raise KeyError("Library read type not recognized.")
+            raise KeyError("Library read type not recognized: {}".format(library_read_type))
 
     # create metadata table
-    def metadata(self, directory):
-        files = glob2.glob(os.path.join(directory, '*'))
-        log.info("files: {}".format(files))
-        metadata_df = pd.DataFrame()
-        for f in files:
-            base_file = os.path.basename(f)
+    # this function appears to not be used...
+    # def metadata(self, directory):
+    #     files = glob2.glob(os.path.join(directory, '*'))
+    #     log.info("files: {}".format(files))
+    #     metadata_df = pd.DataFrame()
+    #     for f in files:
+    #         base_file = os.path.basename(f)
 
-            sample, experiment, library_read_type = self.get_metadata(base_file)
-            _id = self.sample_id(sample, experiment, library_read_type)
+    #         sample, experiment, library_read_type = self.get_metadata(base_file)
+    #         _id = self.sample_id(sample, experiment, library_read_type)
 
-            row = pd.DataFrame({'sample_id': _id,
-                                 'sample_name': sample,
-                                 'library_read_type': self.get_library_read_type(base_file),
-                                 'experiment': experiment}, index=[0])
+    #         row = pd.DataFrame({'sample_id': _id,
+    #                              'sample_name': sample,
+    #                              'library_read_type': self.get_library_read_type(base_file),
+    #                              'experiment': experiment}, index=[0])
 
-            metadata_df = metadata_df.append(row)
+    #         metadata_df = metadata_df.append(row)
 
-        return metadata_df.drop_duplicates()
+    #     if any(metadata_df.duplicated()):
+    #         raise Warning("Found duplicated rows.")
+    #         return metadata_df.drop_duplicates()
+    #     else:
+    #         return metadata_df
