@@ -5,102 +5,65 @@ Created on Mon Apr 15 13:36:11 2019
 
 @author: jwalla12
 """
-import os, glob2
 
-#make a function that takes the trailing filename as an arg
-#then it will get the sample_id
-#call that function in my other functions to parse
+from qcdb.parsers.parse import BaseParser
+import json, logging
 
-def alignmentmetrics_parse(directory):
-    dictionary_list = []
-    directory_list = glob2.glob(os.path.join(directory, '*_alignment_metrics_picard.txt'))
 
-    for fname in directory_list: 
-        base_file = os.path.basename(fname)
-        
-        sample=base_file.split('_')[0]
-        experiment=base_file.split('_')[1]
-        library_read_type=base_file.split('_')[2]
-        if library_read_type[0].isalpha(): # single-end
-            library_read_type = 'se'
-        
-        sample_id = sample+'_'+experiment+'_'+library_read_type
-        
-        f = open(fname, 'r', encoding = "ISO-8859-1")
-        
-        contents = f.readlines()
+log = logging.getLogger(__name__)
+#dirname = os.path.dirname(__file__)
+#dirname = '/Users/jwalla12/Dropbox'
 
-        for content in contents:
+class picardtoolsParser(BaseParser):
+    def __init__(self, file_handle):
+        log.info("Initializing picardtoolsParser...")
+        BaseParser.__init__(self,file_handle)
+        self.alignmentmetrics_parse(file_handle)
+
+    def alignmentmetrics_parse(self, file):
+        #dictionary_list = []         
+        f = open(file, 'r', encoding = "ISO-8859-1")           
+        contents = f.readlines()    
+        for i, content in enumerate(contents):
             if 'PAIR' in content:
-                value = content.strip("\n").split("\t")
-        for content in contents:
-            if 'UNPAIRED' in content:
-                value = content.strip("\n").split("\t")    
-                
-        dictionary = {sample_id:value}
-            
-        dictionary_list.append(dictionary)
-    return(dictionary_list)
+                row = content.strip("\n").split("\t")
+            elif 'UNPAIRED' in content:
+                row = content.strip("\n").split("\t")   
+            if 'METRICS CLASS' in content:
+                qc_program = content.strip("\n").split(".")[-3].split("\t")[-1] 
+                qc_metric = content.strip("\n").split(".")[-1]    
+                header = (contents[i+1]).strip("\n").split("\t")
+        data_dictionary = dict(zip(header,row)) #create dictionary of header and row
+        json_table = json.dumps(data_dictionary) #create json from dictionary
+        alignment_metrics_dict = dict({'sample_id': self.sample_id, 'qc_program': qc_program, 'qc_metric': qc_metric, 'json': json_table})            
+        return(alignment_metrics_dict)
 
-def insertmetrics_parse(directory):
-    dictionary_list = []
-    directory_list = glob2.glob(os.path.join(directory, '*_insertsize_metrics_picard.txt'))
-    
-    for fname in directory_list:
-        base_file = os.path.basename(fname)
-        
-        sample=base_file.split('_')[0]
-        experiment=base_file.split('_')[1]
-        library_read_type=base_file.split('_')[2]
-        if library_read_type[0].isalpha(): # single-end
-            library_read_type = 'se'
-        
-        sample_id = sample+'_'+experiment+'_'+library_read_type
-        
-        f = open(fname, 'r', encoding = "ISO-8859-1")
-        
+    def insertmetrics_parse(self, file):
+        f = open(file, 'r', encoding = "ISO-8859-1")           
+        contents = f.readlines()    
+        for i, content in enumerate(contents):
+            if 'METRICS CLASS' in content:
+                header = (contents[i+1]).strip("\n").split("\t")
+                row = (contents[i+2]).strip("\n").split("\t")
+                qc_program = content.strip("\n").split(".")[-3].split("\t")[-1] 
+                qc_metric = content.strip("\n").split(".")[-1]     
+        data_dictionary = dict(zip(header,row)) #create dictionary of header and row
+        json_table = json.dumps(data_dictionary) #create json from dictionary
+        insert_metrics_dict = dict({'sample_id': self.sample_id, 'qc_program': qc_program, 'qc_metric': qc_metric, 'json': json_table})            
+        return(insert_metrics_dict)
+  
+          
+    def gcbias_parse(self, file):
+        f = open(file, 'r', encoding = "ISO-8859-1")           
         contents = f.readlines()
-        
-        for content in contents:
-            if 'FR' in content:
-                value = content.strip("\n").split("\t")
-        for content in contents:
-            if 'RF' in content:
-                value = content.strip("\n").split("\t")
-        for content in contents:
-            if 'TANDEM' in content:
-                value = content.strip("\n").split("\t") 
-                
-        dictionary = {sample_id:value}
-   
-        dictionary_list.append(dictionary)
-    return(dictionary_list)
-            
-def parse_picard_GCBias_metrics(directory):
-    dictionary_list = []
-    directory_list = glob2.glob(os.path.join(directory, '*_gcbias_metrics_picard.txt'))
-    
-    for fname in directory_list:
-        base_file = os.path.basename(fname)
-        
-        sample=base_file.split('_')[0]
-        experiment=base_file.split('_')[1]
-        library_read_type=base_file.split('_')[2]
-        if library_read_type[0].isalpha(): # single-end
-            library_read_type = 'se'
-        
-        sample_id = sample+'_'+experiment+'_'+library_read_type
-        
-        f = open(fname, 'r', encoding = "ISO-8859-1")
-        
-        contents = f.readlines()
-
-        for content in contents:    
-            if 'All' in content:
-                value = content.strip("\n").split("\t")
-                        
-        dictionary = {sample_id:value}
-   
-        dictionary_list.append(dictionary)
-    return(dictionary_list)
+        for i, content in enumerate(contents):
+            if 'METRICS CLASS' in content:
+                header = (contents[i+1]).strip("\n").split("\t")
+                row = (contents[i+2]).strip("\n").split("\t")
+                qc_program = content.strip("\n").split(".")[-3].split("\t")[-1] 
+                qc_metric = content.strip("\n").split(".")[-1]                  
+        data_dictionary = dict(zip(header,row)) #create dictionary of header and row
+        json_table = json.dumps(data_dictionary) #create json from dictionary
+        gcbias_metrics_dict = dict({'sample_id': self.sample_id, 'qc_program': qc_program, 'qc_metric': qc_metric, 'json': json_table})            
+        return(gcbias_metrics_dict)
 
