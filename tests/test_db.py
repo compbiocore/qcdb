@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 import oyaml as yaml
 import pytest
 import os
-from qcdb.tables_create import metadata_tables
+from qcdb.tables_create import tables
 from qcdb.db_load import parse
 
 @pytest.fixture
@@ -23,7 +23,7 @@ def connection(request, tmpdir_factory):
 	engine = create_engine('sqlite:///'+str(fn))
 
 	metadata = MetaData()
-	metadata = metadata_tables(metadata)
+	metadata = tables(metadata)
 	metadata.create_all(engine)
 
 	connection = engine.connect()
@@ -31,16 +31,12 @@ def connection(request, tmpdir_factory):
 	#request.addfinalizer(metadata.drop_all(engine))
 	return connection
 
-# Tests that the start of each table name should either be
-# samplemeta, qckitfastq, or fastqc
-def test_tables_all_prepended(connection):
+# Tests that there are only 3 tables
+def test_3_tables(connection):
 	m = MetaData()
 	m.reflect(bind=connection)
 	tables = m.tables.keys()
-	modules = set()
-	for t in tables:
-		modules.add(t.split('_')[0])
-	assert(len(modules)==3)
+	assert(len(tables)==3)
 
 # not really in use but works
 @pytest.fixture(scope='function')

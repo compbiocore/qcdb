@@ -12,7 +12,7 @@ class BaseParser(object):
 # i.e. fastqc_adaptcontent: [{_id: 1, position: 1}, {_id: 1, position: 2}]
 
     def __init__(self, file_handle):#, table_yaml):
-        self.tables = defaultdict(list)
+        self.metrics = []
         #self.yaml = table_yaml
         base_file = os.path.basename(file_handle)
         sample, experiment, library_read_type = self.get_metadata(base_file)

@@ -28,31 +28,32 @@ def sql_types(type_):
     else:
         return String(int(type_.split('(')[1].strip(')')))
 
-def metadata_tables(metadata):
-    # Sample metadata table
+def tables(metadata):
     samplemeta = Table('samplemeta', metadata,
         Column('sample_id', String(50), primary_key=True),
         Column('sample_name', String(50), nullable=False),
         Column('library_read_type', String(50)),
-        Column('experiment', String(50))
-    )
+        Column('experiment', String(50)))
 
-    files = glob2.glob(os.path.join(dirname,'tables/*.yaml'))
-    for f in files:
-        with open(f, 'r') as io:
-            d = yaml.load(io)
-        for t in d:
-        	Table(t['table'], metadata, 
-        		Column('_id', Integer, primary_key=True),
-        		Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
-        		*(Column(name=x['name'],type_=sql_types(x['type'])) for x in t['columns']))
+    reference = Table('reference', metadata,
+        Column('qc_program', String(50), primary_key=True),
+        Column('qc_metric', String(50), primary_key=True),
+        Column('experiment_type', String(50), nullable=False)
+        )
+
+    metrics = Table('metrics', metadata,
+        Column('_id', Integer, primary_key=True),
+        Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
+        Column('qc_program', String(50), ForeignKey('reference.qc_program')),
+        Column('qc_metric', String(50), ForeignKey('reference.qc_metric')),
+        Column('data', JSON, nullable=False))
 
     return metadata
 
 def main(config):
 
     with open(config, 'r') as io:
-        d = yaml.load(io)
+        d = yaml.load(io, Loader=yaml.FullLoader)
 
     # Set database name
     db = d['db']['name']
@@ -63,7 +64,7 @@ def main(config):
 
     # Init metadata
     log.info("Making tables...")
-    metadata = metadata_tables(MetaData())
+    metadata = tables(MetaData())
     metadata.create_all(conn, checkfirst=True)
 
 if __name__ == '__main__':
