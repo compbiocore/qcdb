@@ -11,8 +11,7 @@ import json, logging
 
 
 log = logging.getLogger(__name__)
-#dirname = os.path.dirname(__file__)
-#dirname = '/Users/jwalla12/Dropbox'
+dirname = os.path.dirname(__file__)
 
 class picardtoolsParser(BaseParser):
     def __init__(self, file_handle):
@@ -20,10 +19,7 @@ class picardtoolsParser(BaseParser):
         BaseParser.__init__(self,file_handle)
         self.parse(file_handle)
 
-#file=('/Users/jwalla12/Dropbox/SRS777777_SRX777777_alignment_summary_metrics.txt')
-
     def parse(self, file):
-        #dictionary_list = []         
         f = open(file, 'r', encoding = "ISO-8859-1")           
         contents = f.readlines()    
         for i, content in enumerate(contents):
@@ -46,7 +42,7 @@ class picardtoolsParser(BaseParser):
                         
         data_dictionary = dict(zip(header,row)) #create dictionary of header and row
         json_table = json.dumps(data_dictionary) #create json from dictionary
-        alignment_metrics_dict = dict({'sample_id': self.sample_id, 'qc_program': qc_program, 'qc_metric': qc_metric, 'json': json_table})            
-        return(alignment_metrics_dict)
+        picard_dict = dict({'sample_id': self.sample_id, 'qc_program': qc_program, 'qc_metric': qc_metric, 'json': json_table})            
+        return(picard_dict)
 
 
