@@ -18,7 +18,7 @@ parser.add_argument('--file', '-f', help='Location of params.yaml', default='par
 def main(config):
     # Load load.yaml file
     with open(config, 'r') as io:
-        d = yaml.load(io)
+        d = yaml.load(io, Loader=yaml.FullLoader)
 
     db = d['db']['name']
     params = d['db']['params']

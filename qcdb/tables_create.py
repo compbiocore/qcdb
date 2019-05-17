@@ -1,4 +1,5 @@
 from sqlalchemy import *
+from sqlalchemy.orm import Session
 from qcdb.connection import connection
 from collections import OrderedDict
 import argparse
@@ -19,15 +20,6 @@ log.setLevel(logging.INFO)
 parser = argparse.ArgumentParser()
 parser.add_argument('--file', '-f', help='Location of params.yaml', default='params.yaml')
 
-# assuming our only types will be Integer, Float and String
-def sql_types(type_):
-    if type_ == 'Integer':
-        return Integer
-    elif type_ == 'Float':
-        return Float
-    else:
-        return String(int(type_.split('(')[1].strip(')')))
-
 def tables(metadata):
     samplemeta = Table('samplemeta', metadata,
         Column('sample_id', String(50), primary_key=True),
@@ -44,9 +36,14 @@ def tables(metadata):
     metrics = Table('metrics', metadata,
         Column('_id', Integer, primary_key=True),
         Column('sample_id', String(50), ForeignKey('samplemeta.sample_id')),
-        Column('qc_program', String(50), ForeignKey('reference.qc_program')),
-        Column('qc_metric', String(50), ForeignKey('reference.qc_metric')),
-        Column('data', JSON, nullable=False))
+        Column('qc_program', String(50)),
+        Column('qc_metric', String(50)),
+        Column('data', JSON),
+        ForeignKeyConstraint(['qc_program', 'qc_metric'],
+            ['reference.qc_program','reference.qc_metric']),
+        # sample_id, qc_program, qc_metric combo must be unique
+        UniqueConstraint('sample_id','qc_program','qc_metric')
+        )
 
     return metadata
 
@@ -61,11 +58,26 @@ def main(config):
 
     # Start connection
     conn = connection(params=params,db=db)
+    log.info("Connected to {0}:{1}:{2}".format(params['host'],
+                                            params['port'],
+                                            db))
+    session = Session(bind=conn)
 
     # Init metadata
     log.info("Making tables...")
     metadata = tables(MetaData())
     metadata.create_all(conn, checkfirst=True)
+
+    log.info("Populating reference...")
+    with open(os.path.join(dirname,"reference.yaml"), 'r') as io:
+        r = yaml.load(io, Loader=yaml.FullLoader)
+    for ref in r:
+        qc_program = ref['qc_program']
+        experiment_type = ref['experiment_type']
+        inserts = [{'qc_program': qc_program, 'experiment_type': experiment_type,
+        'qc_metric': qc_metric} for qc_metric in ref['qc_metrics']]
+        session.execute(metadata.tables['reference'].insert(), inserts)
+        session.commit()
 
 if __name__ == '__main__':
     args = parser.parse_args()

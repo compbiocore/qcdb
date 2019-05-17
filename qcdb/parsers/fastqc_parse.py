@@ -20,7 +20,7 @@ def json_dump(columns, rows):
 class fastqcParser(BaseParser):
     def __init__(self, file_handle):
         log.info("Initializing fastqcParser...")
-        BaseParser.__init__(self,file_handle)
+        BaseParser.__init__(self,file_handle,'fastqc')
 
         metrics = ['basequal', 'tilequal', 'seqqual', 'perbaseseqcontent',
             'gccontent', 'perbaseNcontent', 'seqlength', 'seqdup', 'overseqs',
@@ -66,4 +66,4 @@ class fastqcParser(BaseParser):
 
             # now want dictionary of sample_id, qc_program (fastqc), qc_metric (each metric), json
             self.metrics.append({'sample_id': self.sample_id, 'qc_program': 'fastqc', 'qc_metric': module,
-                'json': json.dumps(json_dump(columns, rows))})
+                'data': json_dump(columns, rows)})

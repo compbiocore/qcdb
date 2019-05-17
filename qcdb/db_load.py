@@ -8,6 +8,7 @@ import pandas as pd
 import argparse
 import logging
 import sys
+import json
 from qcdb.parsers.qckitfastq_parse import qckitfastqParser
 from qcdb.parsers.fastqc_parse import fastqcParser
 
@@ -23,25 +24,32 @@ log.setLevel(logging.INFO)
 parser = argparse.ArgumentParser()
 parser.add_argument('--file', '-f', help='Location of params.yaml', default='params.yaml')
 
-def insert(results, m, session):
-    log.info("Loading metadata for {}...".format(results.sample_id))
-    
+def insert(results, m, session):    
     s = m.tables['samplemeta']
     # check if sample_id is in table already
     q = session.query(s).filter(s.c.sample_id==results.sample_id)
     if not session.query(q.exists()).scalar():
+        log.info("Loading {} into metadata...".format(results.sample_id))
         session.execute(s.insert().values(sample_id=results.sample_id,
             sample_name=results.sample_name,
             library_read_type=results.library_read_type,
             experiment=results.experiment))
         session.commit()
 
-    # insert results v into each table k
-    for k,v in results.tables.items():
-        log.info("Loading {} ...".format(k))
-        t = m.tables[k]
-        session.execute(t.insert(),v)
-        session.commit()
+    metrics = m.tables['metrics']
+    log.info("Loading {} results for sample {} into metrics...".format(
+        results.qc_program,results.sample_id))
+    session.execute(metrics.insert(), results.metrics)
+    session.commit()
+    #for metric in results.metrics:
+    #    
+    #    test = {'sample_id': metric['sample_id'],
+    #        'qc_program':metric['qc_program'],'qc_metric':metric['qc_metric'],
+    #        'data': json.dumps({'key1':'value1','key2':'value2'})}
+    #    print(test)
+    #    session.execute(metrics.insert(), test)
+#        session.execute(metrics.insert(),metric)
+    #    session.commit()
 
 # temporary solution to get file handles for
 # qckitfastqParser and picardToolsParser
@@ -63,7 +71,9 @@ def split_helper(files):
 # parse and load metadata
 def parse(d, m, session):
     # parse and load metadata
-    for module in d['files']['module']:
+    print(d['files'])
+    for module in d['files']:
+        print(module)
         directory = module['directory']
 
         try:
@@ -87,7 +97,7 @@ def parse(d, m, session):
 def main(config):
     # Load load.yaml file
     with open(config, 'r') as io:
-        d = yaml.load(io)
+        d = yaml.load(io, Loader=yaml.FullLoader)
 
     db = d['db']['name']
     params = d['db']['params']

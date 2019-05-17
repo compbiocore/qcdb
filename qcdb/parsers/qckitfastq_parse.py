@@ -14,7 +14,7 @@ class qckitfastqParser(BaseParser):
 
     def __init__(self, file_handle):
         log.info("Initializing qckitfastqParser...")
-        BaseParser.__init__(self,file_handle)
+        BaseParser.__init__(self,file_handle,'qckitfastq')
 
         file_table_dict = {'adaptcontent': 'adapter_content',
             'gccontent': 'gc_content', 'kmercount': 'kmer_count',
@@ -41,4 +41,4 @@ class qckitfastqParser(BaseParser):
                 with open(file, 'r') as csv_file:
                     csv_reader = csv.DictReader(csv_file)
                     self.metrics.append({'sample_id': self.sample_id, 'qc_program': 'qckitfastq', 'qc_metric': module,
-                    'json': json.dumps([ row for row in csv_reader ])})
+                    'data': json.loads(json.dumps([ row for row in csv_reader ]))})
