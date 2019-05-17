@@ -3,6 +3,7 @@ import os
 import pytest
 from qcdb.parsers.parse import BaseParser
 from qcdb.parsers.fastqc_parse import fastqcParser
+from qcdb.parsers.qckitfastq_parse import qckitfastqParser
 
 dirname = os.path.dirname(__file__)
 
@@ -28,3 +29,11 @@ def test_fastqcparser():
 		# FASTQC has 11 modules
 		# could do this based off of the tables YAML as an auto check
 		assert(len(r.metrics) == 11)
+
+def test_qckitfastqparser():
+	results = qckitfastqParser(os.path.join(dirname, 'data', 'SRS643403_SRX612437_overrep_kmer.csv'))
+	assert(results.sample_name.startswith('SRS'))
+	assert(results.experiment.startswith('SRX'))
+	assert(results.sample_id.split('_')[2]=='se')
+	assert(results.library_read_type=='single ended')
+	assert(len(results.metrics)==9)
