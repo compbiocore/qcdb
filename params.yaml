@@ -10,6 +10,5 @@ files:
     directory: /Users/aguang/CORE/qckit/qcdb/tests/data
   - name: qckitfastq
     directory: /Users/aguang/CORE/qckit/qcdb/tests/data
-    # module:
-  #   - name: picardtools
-  #   - directory: directory for picardtools results
+  - name: picardtools
+    directory: directory for picardtools results

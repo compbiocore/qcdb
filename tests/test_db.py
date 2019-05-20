@@ -38,6 +38,11 @@ def test_3_tables(connection):
 	tables = m.tables.keys()
 	assert(len(tables)==3)
 
+def test_populate(connection):
+	m = MetaData()
+	m.reflect(bind=connection)
+	populate(connection, metadata)
+
 # not really in use but works
 @pytest.fixture(scope='function')
 def session(connection, request):

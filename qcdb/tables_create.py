@@ -47,6 +47,19 @@ def tables(metadata):
 
     return metadata
 
+def populate(conn, metadata):
+    session = Session(bind=conn)
+    log.info("Populating reference...")
+    with open(os.path.join(dirname,"reference.yaml"), 'r') as io:
+        r = yaml.load(io, Loader=yaml.FullLoader)
+    for ref in r:
+        qc_program = ref['qc_program']
+        experiment_type = ref['experiment_type']
+        inserts = [{'qc_program': qc_program, 'experiment_type': experiment_type,
+        'qc_metric': qc_metric} for qc_metric in ref['qc_metrics']]
+        session.execute(metadata.tables['reference'].insert(), inserts)
+        session.commit()
+
 def main(config):
 
     with open(config, 'r') as io:
@@ -61,23 +74,12 @@ def main(config):
     log.info("Connected to {0}:{1}:{2}".format(params['host'],
                                             params['port'],
                                             db))
-    session = Session(bind=conn)
-
     # Init metadata
     log.info("Making tables...")
     metadata = tables(MetaData())
     metadata.create_all(conn, checkfirst=True)
 
-    log.info("Populating reference...")
-    with open(os.path.join(dirname,"reference.yaml"), 'r') as io:
-        r = yaml.load(io, Loader=yaml.FullLoader)
-    for ref in r:
-        qc_program = ref['qc_program']
-        experiment_type = ref['experiment_type']
-        inserts = [{'qc_program': qc_program, 'experiment_type': experiment_type,
-        'qc_metric': qc_metric} for qc_metric in ref['qc_metrics']]
-        session.execute(metadata.tables['reference'].insert(), inserts)
-        session.commit()
+    populate(conn, metadata)
 
 if __name__ == '__main__':
     args = parser.parse_args()
