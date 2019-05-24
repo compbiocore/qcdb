@@ -1,5 +1,5 @@
 - qc_program: fastqc
-  qc_metrics:
+  qc_metric:
     - basequal
     - tilequal
     - seqqual
@@ -13,7 +13,7 @@
     - kmercount
   experiment_type: fastq
 - qc_program: qckitfastq
-  qc_metrics:
+  qc_metric:
     - adaptcontent
     - gccontent
     - kmercount

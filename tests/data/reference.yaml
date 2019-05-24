@@ -1,0 +1,17 @@
+- qc_program: fastqc
+  qc_metric:
+    - basequal
+    - tilequal
+    - seqqual
+  experiment_type: fastq
+- qc_program: qckitfastq
+  qc_metric:
+    - adaptcontent
+    - gccontent
+    - kmercount
+  experiment_type: fastq
+- qc_program: test3
+  qc_metric:
+    - adaptcontent
+    - metric2
+  experiment_type: not_fastq
