@@ -41,15 +41,6 @@ def insert(results, m, session):
         results.qc_program,results.sample_id))
     session.execute(metrics.insert(), results.metrics)
     session.commit()
-    #for metric in results.metrics:
-    #    
-    #    test = {'sample_id': metric['sample_id'],
-    #        'qc_program':metric['qc_program'],'qc_metric':metric['qc_metric'],
-    #        'data': json.dumps({'key1':'value1','key2':'value2'})}
-    #    print(test)
-    #    session.execute(metrics.insert(), test)
-#        session.execute(metrics.insert(),metric)
-    #    session.commit()
 
 # temporary solution to get file handles for
 # qckitfastqParser and picardToolsParser
