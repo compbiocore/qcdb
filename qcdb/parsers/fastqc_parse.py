@@ -20,7 +20,7 @@ def json_dump(columns, rows):
 class fastqcParser(BaseParser):
     def __init__(self, file_handle):
         log.info("Initializing fastqcParser...")
-        BaseParser.__init__(self,file_handle)
+        BaseParser.__init__(self,file_handle,'fastqc')
 
         metrics = ['basequal', 'tilequal', 'seqqual', 'perbaseseqcontent',
             'gccontent', 'perbaseNcontent', 'seqlength', 'seqdup', 'overseqs',
@@ -64,6 +64,8 @@ class fastqcParser(BaseParser):
             columns = lines[start].decode('utf-8').lstrip('#').strip('\n').split('\t')
             rows = lines[start+1:end-1]
 
+            # if no data right now JSON will be empty. OK solution?
+            
             # now want dictionary of sample_id, qc_program (fastqc), qc_metric (each metric), json
             self.metrics.append({'sample_id': self.sample_id, 'qc_program': 'fastqc', 'qc_metric': module,
-                'json': json.dumps(json_dump(columns, rows))})
+                'data': json_dump(columns, rows)})

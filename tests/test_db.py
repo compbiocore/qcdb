@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 import oyaml as yaml
 import pytest
 import os
-from qcdb.tables_create import tables
+from qcdb.tables_create import tables, populate
 from qcdb.db_load import parse
 
 @pytest.fixture
@@ -31,12 +31,28 @@ def connection(request, tmpdir_factory):
 	#request.addfinalizer(metadata.drop_all(engine))
 	return connection
 
-# Tests that there are only 3 tables
-def test_3_tables(connection):
+@pytest.fixture(scope='session')
+def metadata(connection):
 	m = MetaData()
 	m.reflect(bind=connection)
-	tables = m.tables.keys()
+	return(m)
+
+# Tests that there are only 3 tables
+def test_3_tables(metadata):
+	tables = metadata.tables.keys()
 	assert(len(tables)==3)
+
+def test_populate(metadata, session, test_data):
+	populate(session, metadata, os.path.join(test_data,"reference.yaml"))
+	# should check something about populate
+	r = metadata.tables['reference']
+	q = session.query(func.count(distinct(r.c.qc_program)))
+	assert(q.scalar()==3)
+	q = session.query(func.count(distinct(r.c.experiment_type)))
+	assert(q.scalar()==2)
+	print(r.c)
+	q = session.query(func.count(distinct(r.c.qc_metric)))
+	assert(q.scalar()==7)
 
 # not really in use but works
 @pytest.fixture(scope='function')

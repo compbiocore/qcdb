@@ -9,11 +9,11 @@ from qcdb.parsers.picardtools_parse import picardtoolsParser
 dirname = os.path.dirname(__file__)
 
 def test_library_read_type():
-	assert(BaseParser("SRS1_SRX2_1").library_read_type=='paired-end forward')
-	assert(BaseParser("SRS1_SRX2_2").library_read_type=='paired-end reverse')
-	assert(BaseParser("SRS1_SRX2_a").library_read_type=='single ended')
+	assert(BaseParser("SRS1_SRX2_1","a").library_read_type=='paired-end forward')
+	assert(BaseParser("SRS1_SRX2_2",'b').library_read_type=='paired-end reverse')
+	assert(BaseParser("SRS1_SRX2_a",'c').library_read_type=='single ended')
 	with pytest.raises(KeyError):
-		BaseParser("SRS1_SRX2_3")
+		BaseParser("SRS1_SRX2_3",'d')
 
 def test_fastqcparser():
 	results = []

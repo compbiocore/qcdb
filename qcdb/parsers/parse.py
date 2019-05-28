@@ -11,9 +11,9 @@ class BaseParser(object):
 # so we will have a dictionary of a list of dictionaries
 # i.e. fastqc_adaptcontent: [{_id: 1, position: 1}, {_id: 1, position: 2}]
 
-    def __init__(self, file_handle):#, table_yaml):
+    def __init__(self, file_handle, qc_program):
         self.metrics = []
-        #self.yaml = table_yaml
+        self.qc_program = qc_program
         base_file = os.path.basename(file_handle)
         sample, experiment, library_read_type = self.get_metadata(base_file)
         self.sample_id = self.sample_id(sample, experiment, library_read_type)
