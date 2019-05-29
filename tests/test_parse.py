@@ -44,7 +44,6 @@ def test_picardtoolsparser():
     assert(results.sample_name.startswith('SRS'))
     assert(results.experiment.startswith('SRX'))
     assert(len(results.metrics) == 3)
-    assert(results.qc_progam == 'picard')
     
     
         
