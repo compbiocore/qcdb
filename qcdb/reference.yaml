@@ -24,3 +24,9 @@
     - readlength
     - readcontent
   experiment_type: fastq
+- qc_program: picard
+  qc_metric:
+    - insertsizemetrics
+    - alignmentmetrics
+    - gcbiasmetrics
+  experiment_type: alignment  

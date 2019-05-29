@@ -4,13 +4,14 @@ from qcdb.connection import connection
 import glob2
 import oyaml as yaml
 import os
-import pandas as pd
+#import pandas as pd
 import argparse
 import logging
-import sys
-import json
+#import sys
+#import json
 from qcdb.parsers.qckitfastq_parse import qckitfastqParser
 from qcdb.parsers.fastqc_parse import fastqcParser
+from qcdb.parsers.picardtools_parse import picardtoolsParser
 
 # Initialize the logger
 log = logging.getLogger()
@@ -75,6 +76,7 @@ def parse(d, m, session):
                 for f in files:
                     results = fastqcParser(f)
                     insert(results, m, session)
+                    
             elif module['name'] == 'qckitfastq':
                 files = split_helper(glob2.glob(os.path.join(directory, '*.csv')))
                 if not files:
@@ -82,6 +84,15 @@ def parse(d, m, session):
                 for f in files:
                     results = qckitfastqParser(f)
                     insert(results, m, session)
+                    
+            elif module['name'] == 'picardtools':
+                files = split_helper(glob2.glob(os.path.join(directory, '*.txt')))
+                if not files:
+                    log.error("No picardtools output found in: {}".format(directory))
+                for f in files:
+                    results = picardtoolsParser(f)
+                    insert(results, m, session)                    
+                    
         except:
             log.error("Error in parsing...")
 
