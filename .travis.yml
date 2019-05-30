@@ -8,15 +8,6 @@ python:
 services:
   - docker
 
-env:
-  - DOCKER_COMPOSE_VERSION=1.4.2
-
-before_install:
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
-
 install:
   - pip install -I pytest==3.6
   - pip install codecov
@@ -24,3 +15,6 @@ install:
 
 script:
   - python -m pytest --cov=./
+
+after_success:
+  - codecov
