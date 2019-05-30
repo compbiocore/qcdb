@@ -5,9 +5,9 @@ import mysql.connector
 from qcdb.connection import connection
 import pytest
 
-# if not os.getenv('TRAVIS'):
-#     from dotenv import load_dotenv
-#     load_dotenv()
+if not os.getenv('TRAVIS'):
+    from dotenv import load_dotenv
+    load_dotenv()
 
 @pytest.fixture
 def params():
@@ -20,12 +20,12 @@ def params():
 
 def test_connection(params):
     # start mysql server on docker
-    # if os.getenv('TRAVIS'):
-    params["password"] = ""
-    params["host"] = "127.0.0.1"
-    # else:
-    #     subprocess.run(['docker-compose', '-f', 'tests/data/docker-compose.yml', 'up', '-d'])
-    #     time.sleep(10)
+    if os.getenv('TRAVIS'):
+        params["password"] = ""
+        params["host"] = "127.0.0.1"
+    else:
+        subprocess.run(['docker-compose', '-f', 'tests/data/docker-compose.yml', 'up', '-d'])
+        time.sleep(10)
 
     con = connection(params)
 
@@ -33,15 +33,15 @@ def test_connection(params):
     assert(con.is_connected() == True)
 
 
-# def test_datsci_msql_conn(params):
-#     if os.getenv('TRAVIS'):
-#         print('Skipping Datasci Server Test')
-#     else:
-#         params["user"] = os.getenv("MYSQLUSER")
-#         params["password"] = os.getenv("MYSQLPASSWORD")
-#         params["host"] = "pdspracticemydbcit.services.brown.edu"
-#
-#         con = connection(params)
-#
-#         assert(type(con) == mysql.connector.connection_cext.CMySQLConnection)
-#         assert(con.is_connected() == True)
+def test_datsci_msql_conn(params):
+    if os.getenv('TRAVIS'):
+        print('Skipping Datasci Server Test')
+    else:
+        params["user"] = os.getenv("MYSQLUSER")
+        params["password"] = os.getenv("MYSQLPASSWORD")
+        params["host"] = "pdspracticemydbcit.services.brown.edu"
+
+        con = connection(params)
+
+        assert(type(con) == mysql.connector.connection_cext.CMySQLConnection)
+        assert(con.is_connected() == True)
