@@ -16,7 +16,7 @@
 
 #### Install dependencies
 ```
-pip install mysql-connector-python sqlalchemy glob2 oyaml pandas
+pip install mysql-connector-python sqlalchemy glob2 oyaml pandas dotenv
 ```
 
 ## Development
@@ -90,6 +90,9 @@ python -m qcdb.db_load
 #### Running tests
 
 From the top level of the `qcdb` directory, run:
+
 ```
 python -m pytest
 ```
+
+For testing the connection, create a `.env` file in the `tests` folder with `USER` and `PASSWORD` used to connect to the datasci mysql server.
