@@ -9,7 +9,8 @@ services:
   - mysql
 
 install:
-  - pip install pytest codecov pytest-cov sqlalchemy glob2 oyaml pandas mysql-connector-python
+  - pip install -I pytest==3.6
+  - pip install codecov pytest-cov sqlalchemy glob2 oyaml pandas mysql-connector-python
 
 script:
   - python -m pytest --cov=./

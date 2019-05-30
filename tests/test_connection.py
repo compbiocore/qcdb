@@ -11,15 +11,14 @@ if not os.getenv('TRAVIS'):
 
 @pytest.fixture
 def params():
-    params = {'user': 'root',
+    params_ = {'user': 'root',
               'password': 'password',
               'host': '0.0.0.0',
               'raise_on_warnings': True,
               }
-    return params
+    return params_
 
 def test_connection(params):
-    # start mysql server on docker
     if os.getenv('TRAVIS'):
         params["password"] = ""
         params["host"] = "127.0.0.1"
