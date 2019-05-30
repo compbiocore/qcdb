@@ -17,15 +17,20 @@ def params():
               }
     return params
 
-def test_connection_local(params):
+def test_connection(params):
     # start mysql server on docker
-    subprocess.run(['docker-compose', '-f', 'tests/data/docker-compose.yml', 'up', '-d'])
-    time.sleep(10)
+    if os.getenv('TRAVIS'):
+        params["password"] = ""
+        params["host"] = "127.0.0.1"
+    else:
+        subprocess.run(['docker-compose', '-f', 'tests/data/docker-compose.yml', 'up', '-d'])
+        time.sleep(10)
 
     con = connection(params)
 
     assert(type(con) == mysql.connector.connection_cext.CMySQLConnection)
     assert(con.is_connected() == True)
+
 
 def test_datsci_msql_conn(params):
     params["user"] = os.getenv("MYSQLUSER")

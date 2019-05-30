@@ -1,14 +1,12 @@
 language: python
 os:
   - linux
-dist: trusty
-
 sudo: required
 python:
   - "3.6"
 
 services:
-  - docker
+  - mysql
 
 install:
   - pip install -I pytest==3.6
