@@ -2,11 +2,12 @@ import os
 import subprocess
 import time
 import mysql.connector
-from dotenv import load_dotenv
 from qcdb.connection import connection
 import pytest
 
-load_dotenv()
+if not os.getenv('TRAVIS'):
+    from dotenv import load_dotenv
+    load_dotenv()
 
 @pytest.fixture
 def params():
