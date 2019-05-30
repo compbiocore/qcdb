@@ -1,6 +1,4 @@
 import os
-import subprocess
-import time
 import mysql.connector
 from qcdb.connection import connection
 import pytest
@@ -23,6 +21,9 @@ def test_connection(params):
         params["password"] = ""
         params["host"] = "127.0.0.1"
     else:
+        import subprocess
+        import time
+        
         subprocess.run(['docker-compose', '-f', 'tests/data/docker-compose.yml', 'up', '-d'])
         time.sleep(10)
 
