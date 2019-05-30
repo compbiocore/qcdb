@@ -28,8 +28,8 @@ def test_connection_local(params):
     assert(con.is_connected() == True)
 
 def test_datsci_msql_conn(params):
-    params["user"] = os.getenv("USER")
-    params["password"] = os.getenv("PASSWORD")
+    params["user"] = os.getenv("MYSQLUSER")
+    params["password"] = os.getenv("MYSQLPASSWORD")
     params["host"] = "pdspracticemydbcit.services.brown.edu"
 
     con = connection(params)
