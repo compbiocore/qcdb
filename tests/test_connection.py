@@ -33,11 +33,14 @@ def test_connection(params):
 
 
 def test_datsci_msql_conn(params):
-    params["user"] = os.getenv("MYSQLUSER")
-    params["password"] = os.getenv("MYSQLPASSWORD")
-    params["host"] = "pdspracticemydbcit.services.brown.edu"
+    if os.getenv('TRAVIS'):
+        print('Skipping Datasci Server Test')
+    else:
+        params["user"] = os.getenv("MYSQLUSER")
+        params["password"] = os.getenv("MYSQLPASSWORD")
+        params["host"] = "pdspracticemydbcit.services.brown.edu"
 
-    con = connection(params)
+        con = connection(params)
 
-    assert(type(con) == mysql.connector.connection_cext.CMySQLConnection)
-    assert(con.is_connected() == True)
+        assert(type(con) == mysql.connector.connection_cext.CMySQLConnection)
+        assert(con.is_connected() == True)
