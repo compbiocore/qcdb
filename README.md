@@ -16,7 +16,7 @@
 
 #### Install dependencies
 ```
-pip install sqlalchemy pymysql glob2 oyaml pandas
+pip install mysql-connector-python sqlalchemy glob2 oyaml pandas
 ```
 
 ## Development
