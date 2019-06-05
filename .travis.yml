@@ -14,4 +14,6 @@ before_script:
 
 script:
   - docker-compose run test
+
+after_success:
   - docker-compose run coverage

@@ -18,7 +18,7 @@ services:
 
   test:
     <<: *py3
-    command: python -m pytest --cov=./
+    command: python -m pytest --cov=/usr/src/
     environment:
       MYSQL_HOST: mysql
     depends_on:
@@ -27,5 +27,3 @@ services:
   coverage:
     <<: *py3
     command: codecov
-    depends_on:
-      - test
