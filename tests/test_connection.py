@@ -14,7 +14,7 @@ def params():
     params_ = {'user': 'root',
               'password': 'password',
               'host': os.getenv("MYSQL_HOST"),
-              'raise_on_warnings': True,
+              'raise_on_warnings': True
               }
     return params_
 

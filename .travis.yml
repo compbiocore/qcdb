@@ -9,8 +9,11 @@ python:
 services:
   - docker
 
+before_script:
+  - service mysql stop
+
 script:
   - docker-compose run test
 
 after_success:
-  - codecov
+  - docker-compose run coverage

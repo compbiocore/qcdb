@@ -3,3 +3,4 @@ data/*
 *.ipynb*
 .env
 .coverage
+.DS_Store
