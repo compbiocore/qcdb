@@ -30,6 +30,9 @@ def tables(metadata):
     reference = Table('reference', metadata,
         Column('qc_program', String(50), primary_key=True),
         Column('qc_metric', String(50), primary_key=True),
+        Column('field_name', String(50), primary_key=True),
+        Column('field_code', String(5)),
+        Column('display_name', String(50)),
         Column('experiment_type', String(50), nullable=False)
         )
 
