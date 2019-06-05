@@ -7,14 +7,10 @@ python:
   - "3.6"
 
 services:
-  - mysql
-
-install:
-  - pip install -I pytest==3.6
-  - pip install codecov pytest-cov sqlalchemy glob2 oyaml pandas mysql-connector-python pytest-faulthandler
+  - docker
 
 script:
-  - python -m pytest --cov=./
+  - docker-compose run test
 
 after_success:
   - codecov
