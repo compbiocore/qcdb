@@ -11,8 +11,11 @@ services:
     ports:
       - 3306:3306
 
-  test: &test
+  py3: &py3
     build: .
+
+  test: 
+    <<: *py3
     command: python -m pytest --cov=./
     volumes:
       - ./:/usr/src/
@@ -22,5 +25,5 @@ services:
       - mysql
 
   coverage:
-    <<: *test
+    <<: *py3
     command: codecov
