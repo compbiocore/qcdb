@@ -5,12 +5,12 @@ log = logging.getLogger(__name__)
 dirname = os.path.dirname('__file__')
 
 class picardtoolsParser(BaseParser):
-    
-    def __init__(self, file_handle):
+
+    def __init__(self, file_handle, session, ref_table, build_ref):
         log.info("Initializing picardtoolsParser...")
-        BaseParser.__init__(self,file_handle,'picard')       
+        BaseParser.__init__(self,file_handle,'picard', session, ref_table, build_ref)
         file_table_dict = {'insertsizemetrics': 'insertsize_metrics_picard',
-            'alignmentmetrics': 'alignment_summary_metrics_picard', 
+            'alignmentmetrics': 'alignment_summary_metrics_picard',
             'gcbiasmetrics': 'summary_gcbias_metrics_picard'}
         self.parse(file_table_dict, os.path.dirname(file_handle))
 
@@ -21,7 +21,7 @@ class picardtoolsParser(BaseParser):
 '{}_{}_*{}.txt'.format(self.sample_name,self.experiment,name)))
 
             for file in files:
-                f = open(file, 'r', encoding = "ISO-8859-1")           
+                f = open(file, 'r', encoding = "ISO-8859-1")
                 content = f.read()
                 m = re.search(r"METRICS\sCLASS\s*(\w+)\.[^.]*\.(\w+)\n([^\n]+)\n(([^\n#]+\n)+)", content)
                 #module = m.group(2)

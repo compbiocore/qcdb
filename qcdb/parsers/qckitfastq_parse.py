@@ -12,9 +12,9 @@ dirname = os.path.dirname(__file__)
 
 class qckitfastqParser(BaseParser):
 
-    def __init__(self, file_handle):
+    def __init__(self, file_handle, session, ref_table, build_ref):
         log.info("Initializing qckitfastqParser...")
-        BaseParser.__init__(self,file_handle,'qckitfastq')
+        BaseParser.__init__(self,file_handle,'qckitfastq', session, ref_table, build_ref)
 
         file_table_dict = {'adaptcontent': 'adapter_content',
             'gccontent': 'gc_content', 'kmercount': 'kmer_count',

@@ -24,8 +24,9 @@ log.setLevel(logging.INFO)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--file', '-f', help='Location of params.yaml', default='params.yaml')
+parser.add_argument('--buildref', '-r', help='Flag to build reference table from this session', action='store_true')
 
-def insert(results, m, session):    
+def insert(results, m, session):
     s = m.tables['samplemeta']
     # check if sample_id is in table already
     q = session.query(s).filter(s.c.sample_id==results.sample_id)
@@ -61,12 +62,14 @@ def split_helper(files):
     return unique_files
 
 # parse and load metadata
-def parse(d, m, session):
+def parse(d, m, session, build_ref):
     # parse and load metadata
     print(d['files'])
     for module in d['files']:
         print(module)
         directory = module['directory']
+
+        refs = m.tables['reference']
 
         try:
             if module['name'] == 'fastqc':
@@ -74,29 +77,29 @@ def parse(d, m, session):
                 if not files:
                     log.error("No fastqc output found in: {}".format(directory))
                 for f in files:
-                    results = fastqcParser(f)
+                    results = fastqcParser(f, session, refs, build_ref)
                     insert(results, m, session)
-                    
+
             elif module['name'] == 'qckitfastq':
                 files = split_helper(glob2.glob(os.path.join(directory, '*.csv')))
                 if not files:
                     log.error("No qckitfastqc output found in: {}".format(directory))
                 for f in files:
-                    results = qckitfastqParser(f)
+                    results = qckitfastqParser(f, session, refs, build_ref)
                     insert(results, m, session)
-                    
+
             elif module['name'] == 'picardtools':
                 files = split_helper(glob2.glob(os.path.join(directory, '*.txt')))
                 if not files:
                     log.error("No picardtools output found in: {}".format(directory))
                 for f in files:
-                    results = picardtoolsParser(f)
-                    insert(results, m, session)                    
-                    
+                    results = picardtoolsParser(f, session, refs, build_ref)
+                    insert(results, m, session)
+
         except:
             log.error("Error in parsing...")
 
-def main(config):
+def main(config, build_ref):
     # Load load.yaml file
     with open(config, 'r') as io:
         d = yaml.load(io, Loader=yaml.FullLoader)
@@ -112,9 +115,10 @@ def main(config):
     m = MetaData()
     m.reflect(bind=conn)
 
-    parse(d, m, session)
+    parse(d, m, session, build_ref)
 
 if __name__ == '__main__':
     args = parser.parse_args()
     config = str(args.file)
-    main(config)
+    build_ref = args.buildref
+    main(config, build_ref)
