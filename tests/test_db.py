@@ -91,9 +91,11 @@ def test_fastqcparser(session, metadata):
 		# could do this based off of the tables YAML as an auto check
 		assert(len(r.metrics) == 11)
 
-	# test that the reference table updated
+	# test that the reference table updated with minified values
 	count = 0
 	for row in session.execute(metadata.tables['reference'].select()):
+		if count == 0:
+			assert(len(row['field_name']) > len(row['field_code']))
 		count +=1
 	assert(count > 0)
 
