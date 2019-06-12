@@ -64,7 +64,7 @@ class BaseParser(object):
     # get the reference map for this qc_program (e.g. {kmercount: {long_name: l}})
     def get_reference_map(self):
         map = {}
-        s = select([self.ref_table.c.qc_metric, self.ref_table.c.field_name, self.ref_table.c.field_code].where(self.ref_table.c.qc_program == self.qc_program))
+        s = select([self.ref_table.c.qc_metric, self.ref_table.c.field_name, self.ref_table.c.field_code]).where(self.ref_table.c.qc_program == self.qc_program)
         for row in self.session.execute(s):
             # add metric to map if it doesn't yet exist
             if row['qc_metric'] not in map:
@@ -75,7 +75,8 @@ class BaseParser(object):
         return map
 
     # utility function to create field code
-    def get_new_mapping(field_name, codes):
+    def get_new_mapping(self, field_name, codes):
+        print("Creating new code for ", field_name, " these codes already exist:", codes)
         s = field_name.lower()
         s = re.sub('[^0-9a-zA-Z]+', ' ', s)
         xl = s.split()
@@ -94,6 +95,7 @@ class BaseParser(object):
         i = 1
         while i < len(xl):
             candidate += xl[i][0]
+            i+=1
 
         # return acronym if not used
         if candidate not in codes:
@@ -108,7 +110,7 @@ class BaseParser(object):
 
     # create new mapping value from field name to code
     def get_mapped_val(self, metric_type, field_name):
-        if not build_ref:
+        if not self.build_ref:
             raise Exception('Can only update reference mappings when buildref set to true')
 
         if metric_type not in self.ref_map:
@@ -120,9 +122,10 @@ class BaseParser(object):
         if field_name in mmap:
             return mmap[field_name]
         else:
-            new_val = get_new_mapping(field_name, mmap.values())
+            new_val = self.get_new_mapping(field_name, mmap.values())
             self.ref_map[metric_type][field_name] = new_val
-            self.session.execute(self.ref_table.insert(), qc_program=self.qc_program, qc_metric=self.qc_metric, field_name=field_name, field_code=new_val, display_name=field_name)
+            self.session.execute(self.ref_table.insert(), [{'qc_program':self.qc_program, 'qc_metric':metric_type, 'field_name':field_name, 'field_code':new_val, 'display_name':field_name}])
+            self.session.commit()
             return new_val
 
 
