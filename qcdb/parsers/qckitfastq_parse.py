@@ -33,12 +33,29 @@ class qckitfastqParser(BaseParser):
                 '{}_{}_*{}.csv'.format(self.sample_name,self.experiment,name)))
             for file in files:
 
-            #     columns = [m['name'] for m in module['columns']]
-            #     types = [self.change_type(m['type']) for m in module['columns']]
-            #     df = pd.read_csv(file, sep=',', names=columns,skiprows=1,dtype=dict(zip(columns,types)))
-            #     df['sample_id'] = self.sample_id
-            #     self.tables[module['table']] = df.to_dict(orient="records")
                 with open(file, 'r') as csv_file:
                     csv_reader = csv.DictReader(csv_file)
+
+                    # update column names
+                    columns = csv_reader.fieldnames
+
+                    if self.build_ref and module not in self.ref_map:
+                        metric_map = {}
+                    else:
+                        metric_map = self.ref_map[module]
+
+                    new_cols = []
+                    for column in columns:
+                        if column in metric_map:
+                            new_cols.append(metric_map[column])
+                        elif self.build_ref:
+                            new_col = self.get_mapped_val(module, column)
+                            metric_map[column] = new_col
+                            new_cols.append(new_col)
+                        else:
+                            raise Exception('Metric type does not have a mapped code')
+
+                    new_csv_reader = csv.DictReader(csv_file, fieldnames=new_cols)
+
                     self.metrics.append({'sample_id': self.sample_id, 'qc_program': 'qckitfastq', 'qc_metric': module,
-                    'data': json.loads(json.dumps([ row for row in csv_reader ]))})
+                    'data': json.loads(json.dumps([ row for row in new_csv_reader ]))})

@@ -8,5 +8,5 @@ db:
 files:
   - name: fastqc
     directory: /Users/mmcgrat3/src/qcdb/tests/data/
-  # - name: qckitfastq
-  #   directory: /Users/mmcgrat3/src/qcdb/tests/data/
+  - name: qckitfastq
+    directory: /Users/mmcgrat3/src/qcdb/tests/data/
