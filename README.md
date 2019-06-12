@@ -16,7 +16,7 @@
 
 #### Install dependencies
 ```
-pip install sqlalchemy pymysql glob2 oyaml pandas
+pip install mysql-connector-python sqlalchemy glob2 oyaml pandas dotenv
 ```
 
 ## Development
@@ -90,6 +90,15 @@ python -m qcdb.db_load
 #### Running tests
 
 From the top level of the `qcdb` directory, run:
+
 ```
 python -m pytest
 ```
+
+#### Running tests via Docker Compose
+
+```
+docker-compose run test
+```
+
+For testing the connection, create a `.env` file in the `tests` folder with `MYSQLUSER` and `MYSQLPASSWORD` used to connect to the datasci mysql server.
