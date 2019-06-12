@@ -25,13 +25,30 @@ class picardtoolsParser(BaseParser):
                 content = f.read()
                 m = re.search(r"METRICS\sCLASS\s*(\w+)\.[^.]*\.(\w+)\n([^\n]+)\n(([^\n#]+\n)+)", content)
                 #module = m.group(2)
-                header = m.group(3).split("\t")
+                columns = m.group(3).split("\t")
                 d = m.group(4)
                 p = re.search(r"^(PAIR|UNPAIRED)[^\n]*", m.group(4), flags=re.M)
                 if p:
                     d = p.group(0)
                 data = d.strip("\n").split("\t")
-                data_dictionary = dict(zip(header, data))
+
+                if self.build_ref and module not in self.ref_map:
+                    metric_map = {}
+                else:
+                    metric_map = self.ref_map[module]
+
+                new_cols = []
+                for column in columns:
+                    if column in metric_map:
+                        new_cols.append(metric_map[column])
+                    elif self.build_ref:
+                        new_col = self.get_mapped_val(module, column)
+                        metric_map[column] = new_col
+                        new_cols.append(new_col)
+                    else:
+                        raise Exception('Metric type does not have a mapped code')
+
+                data_dictionary = dict(zip(new_cols, data))
                 json_table = json.dumps(data_dictionary)
                 picard_dict = dict(
                     {'sample_id': self.sample_id, 'qc_program': 'picard', 'qc_metric': module, 'data': json_table})
