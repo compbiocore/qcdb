@@ -87,14 +87,6 @@ python -m qcdb.tables_create
 python -m qcdb.db_load
 ```
 
-#### Running tests
-
-From the top level of the `qcdb` directory, run:
-
-```
-python -m pytest
-```
-
 #### Running tests via Docker Compose
 
 ```

@@ -91,6 +91,12 @@ def test_fastqcparser(session, metadata):
 		# could do this based off of the tables YAML as an auto check
 		assert(len(r.metrics) == 11)
 
+	# test that the reference table updated
+	count = 0
+	for row in session.execute(metadata.tables['reference'].select()):
+		count +=1
+	assert(count > 0)
+
 def test_qckitfastqparser(session, metadata):
 	results = qckitfastqParser(os.path.join(dirname, 'data', 'SRS643403_SRX612437_overrep_kmer.csv'), session, metadata.tables['reference'], true)
 	assert(results.sample_name.startswith('SRS'))
