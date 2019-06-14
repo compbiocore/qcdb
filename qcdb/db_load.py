@@ -83,9 +83,9 @@ def parse(d, m, session, build_ref):
         if module['name'] == 'fastqc':
             dispatch_parse(directory, 'fastqc', '*_fastqc.zip', fastqcParser, session, m, refs, buildref)
         elif module['name'] == 'qckitfastq':
-            dispatch_parse(directory, 'qckitfastq', '*.csv', fastqcParser, session, m, refs, buildref)
+            dispatch_parse(directory, 'qckitfastq', '*.csv', qckitfastqParser, session, m, refs, buildref)
         elif module['name'] == 'picardtools':
-            dispatch_parse(directory, 'picardtools', '*.txt', fastqcParser, session, m, refs, buildref)
+            dispatch_parse(directory, 'picardtools', '*.txt', picardToolsParser, session, m, refs, buildref)
 
 
 def main(config, build_ref):
