@@ -61,6 +61,17 @@ def split_helper(files):
             unique_files.add(os.path.join(dirname,"_".join(s)))
     return unique_files
 
+def dispatch_parse(directory, module_name, module_glob, module_fn, session, m, refs, build_ref):
+    files = glob2.glob(os.path.join(directory, module_glob))
+    if not files:
+        log.error("No {0} output found in: {1}".format(module_name, directory))
+    for f in files:
+        try:
+            results = module_fn(f, session, refs, build_ref)
+            insert(results, m, session)
+        except:
+            log.error("Error in parsing {}...".format(f))
+
 # parse and load metadata
 def parse(d, m, session, build_ref):
     # parse and load metadata
@@ -69,33 +80,13 @@ def parse(d, m, session, build_ref):
 
         refs = m.tables['reference']
 
-        try:
-            if module['name'] == 'fastqc':
-                files = glob2.glob(os.path.join(directory, '*_fastqc.zip'))
-                if not files:
-                    log.error("No fastqc output found in: {}".format(directory))
-                for f in files:
-                    results = fastqcParser(f, session, refs, build_ref)
-                    insert(results, m, session)
+        if module['name'] == 'fastqc':
+            dispatch_parse(directory, 'fastqc', '*_fastqc.zip', fastqcParser, session, m, refs, buildref)
+        elif module['name'] == 'qckitfastq':
+            dispatch_parse(directory, 'qckitfastq', '*.csv', fastqcParser, session, m, refs, buildref)
+        elif module['name'] == 'picardtools':
+            dispatch_parse(directory, 'picardtools', '*.txt', fastqcParser, session, m, refs, buildref)
 
-            elif module['name'] == 'qckitfastq':
-                files = split_helper(glob2.glob(os.path.join(directory, '*.csv')))
-                if not files:
-                    log.error("No qckitfastqc output found in: {}".format(directory))
-                for f in files:
-                    results = qckitfastqParser(f, session, refs, build_ref)
-                    insert(results, m, session)
-
-            elif module['name'] == 'picardtools':
-                files = split_helper(glob2.glob(os.path.join(directory, '*.txt')))
-                if not files:
-                    log.error("No picardtools output found in: {}".format(directory))
-                for f in files:
-                    results = picardtoolsParser(f, session, refs, build_ref)
-                    insert(results, m, session)
-
-        except:
-            log.error("Error in parsing...")
 
 def main(config, build_ref):
     # Load load.yaml file
