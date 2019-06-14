@@ -68,9 +68,12 @@ def dispatch_parse(directory, module_name, module_glob, module_fn, session, m, r
     for f in files:
         try:
             results = module_fn(f, session, refs, build_ref)
-            insert(results, m, session)
         except:
             log.error("Error in parsing {}...".format(f))
+        try:
+            insert(results, m, session)
+        except:
+            log.error("Data for {} already exists in db".format(f))
 
 # parse and load metadata
 def parse(d, m, session, build_ref):
@@ -81,11 +84,11 @@ def parse(d, m, session, build_ref):
         refs = m.tables['reference']
 
         if module['name'] == 'fastqc':
-            dispatch_parse(directory, 'fastqc', '*_fastqc.zip', fastqcParser, session, m, refs, buildref)
+            dispatch_parse(directory, 'fastqc', '*_fastqc.zip', fastqcParser, session, m, refs, build_ref)
         elif module['name'] == 'qckitfastq':
-            dispatch_parse(directory, 'qckitfastq', '*.csv', qckitfastqParser, session, m, refs, buildref)
+            dispatch_parse(directory, 'qckitfastq', '*.csv', qckitfastqParser, session, m, refs, build_ref)
         elif module['name'] == 'picardtools':
-            dispatch_parse(directory, 'picardtools', '*.txt', picardToolsParser, session, m, refs, buildref)
+            dispatch_parse(directory, 'picardtools', '*.txt', picardtoolsParser, session, m, refs, build_ref)
 
 
 def main(config, build_ref):

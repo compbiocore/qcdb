@@ -4,11 +4,11 @@ db:
     host: 127.0.0.1
     port: 3306
     user: root
-    password: ''
+    password: password
 files:
   - name: fastqc
-    directory: /Users/mmcgrat3/src/qcdb/tests/data/
+    directory: /Users/aguang/CORE/qckit/qcdb/tests/data/
   - name: qckitfastq
-    directory: /Users/mmcgrat3/src/qcdb/tests/data/
+    directory: /Users/aguang/CORE/qckit/qcdb/tests/data/
   - name: picardtools
-    directory: /Users/mmcgrat3/src/qcdb/tests/data/
+    directory: /Users/aguang/CORE/qckit/qcdb/tests/data/
