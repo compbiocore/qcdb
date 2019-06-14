@@ -85,6 +85,7 @@ python -m qcdb.tables_create
 ```
 
 #### Load Data
+If loading for the first time or adding a new metric/file type, run with the `--buildref` flag.
 
 ```
 python -m qcdb.db_load

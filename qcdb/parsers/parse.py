@@ -76,7 +76,7 @@ class BaseParser(object):
 
     # utility function to create field code
     def get_new_mapping(self, field_name, codes):
-        print("Creating new code for ", field_name, " these codes already exist:", codes)
+        log.info("Creating new code for {0} these codes already exist: {1}".format(field_name, codes))
         s = field_name.lower()
         s = re.sub('[^0-9a-zA-Z]+', ' ', s)
         xl = s.split()
