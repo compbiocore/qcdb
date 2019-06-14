@@ -1,5 +1,4 @@
 import os
-import mysql.connector
 from qcdb.connection import connection
 import sqlalchemy
 import pytest

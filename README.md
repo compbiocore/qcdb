@@ -15,8 +15,11 @@
 [Docker Installation](https://docs.docker.com/docker-for-mac/install/)
 
 #### Install dependencies
+
+Pre-requisite of `pipenv` needed [pipenv](https://docs.pipenv.org/en/latest/)
+
 ```
-pip install mysql-connector-python sqlalchemy glob2 oyaml pandas dotenv
+pipenv install
 ```
 
 ## Development
@@ -66,7 +69,7 @@ docker-compose up
 
 #### Connect to Server
 ```
-docker-compose exec db mysql -p
+docker-compose exec mysql mysql -p
 ```
 Password: `password`
 
