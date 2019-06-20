@@ -41,20 +41,24 @@ All commands below need to be run from the top-level directory of this repositor
 db:
   name: qcdb
   params:
-    host: 0.0.0.0
+    host: 127.0.0.1
     port: 3306
     user: root
     password: password
 files:
-  module:
-    - name: fastqc
-    - directory: /Users/aguang/CORE/qckit/qcdb/tests/data
-  module:
-  	- name qckitfastq
-  	- directory: /Users/aguang/CORE/qckit/qcdb/tests/data
+  - name: fastqc
+    directory: /Users/aguang/CORE/qckit/qcdb/tests/data/
+  - name: qckitfastq
+    directory: /Users/aguang/CORE/qckit/qcdb/tests/data/
+  - name: picardtools
+    directory: /Users/aguang/CORE/qckit/qcdb/tests/data/
+
 ```
 
 Each module run in the commands below also take a `-f` argument which by default is set to the top-level `params.yaml`. Thus no additional arguments need to be provided. However, if the user wishes to provide a yaml file from a different location, that is possible by providing commands like the following:
+
+**NOTE:** to take advantage of the pipenv installation, enter a `pipenv shell` before running the python commands
+
 
 ```
 python -m qcdb.db_create -f path/to/params.yaml
