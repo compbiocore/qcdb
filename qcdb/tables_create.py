@@ -69,23 +69,6 @@ def tables(metadata):
 
     return metadata
 
-<<<<<<< HEAD
-
-def populate(session, metadata, reference_yaml):
-    log.info("Populating reference...")
-    with open(reference_yaml, 'r') as io:
-        r = yaml.load(io, Loader=yaml.FullLoader)
-    for ref in r:
-        qc_program = ref['qc_program']
-        experiment_type = ref['experiment_type']
-        inserts = [{'qc_program': qc_program, 'experiment_type': experiment_type,
-        'qc_metric': qc_metric} for qc_metric in ref['qc_metric']]
-        session.execute(metadata.tables['reference'].insert(), inserts)
-        session.commit()
-
-
-=======
->>>>>>> f9d205626444beb07558b8be3d260c7d5490562e
 def main(config):
 
     with open(config, 'r') as io:
