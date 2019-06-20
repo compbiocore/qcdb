@@ -26,4 +26,4 @@ services:
 
   coverage:
     <<: *py3
-    command: codecov
+    command: pipenv run codecov
