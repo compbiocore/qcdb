@@ -105,10 +105,10 @@ def test_qckitfastqparser(session, metadata):
 	assert(results.experiment.startswith('SRX'))
 	assert(results.sample_id.split('_')[2]=='se')
 	assert(results.library_read_type=='single ended')
-	assert(len(results.metrics)==9)
+	assert(len(results.metrics)==1)
 
 def test_picardtoolsparser(session, metadata):
     results = picardtoolsParser(os.path.join(dirname, 'data', 'SRS999999_SRX999999_summary_gcbias_metrics_picard.txt'), session, metadata.tables['reference'], true)
     assert(results.sample_name.startswith('SRS'))
     assert(results.experiment.startswith('SRX'))
-    assert(len(results.metrics) == 3)
+    assert(len(results.metrics) == 1)
