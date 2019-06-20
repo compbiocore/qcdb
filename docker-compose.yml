@@ -18,7 +18,7 @@ services:
 
   test:
     <<: *py3
-    command: python -m pytest --cov=/usr/src/
+    command: pipenv run python -m pytest --cov=/usr/src/
     environment:
       MYSQL_HOST: mysql
     depends_on:

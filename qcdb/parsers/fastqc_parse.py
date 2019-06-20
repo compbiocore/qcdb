@@ -18,13 +18,14 @@ def json_dump(columns, rows):
     return(json_list)
 
 class fastqcParser(BaseParser):
-    def __init__(self, file_handle):
+    def __init__(self, file_handle, session, ref_table, build_ref):
         log.info("Initializing fastqcParser...")
-        BaseParser.__init__(self,file_handle,'fastqc')
+        BaseParser.__init__(self,file_handle,'fastqc', session, ref_table, build_ref)
 
         metrics = ['basequal', 'tilequal', 'seqqual', 'perbaseseqcontent',
             'gccontent', 'perbaseNcontent', 'seqlength', 'seqdup', 'overseqs',
             'adaptcontent', 'kmercount']
+
         self.parse(file_handle, metrics)
 
         #with open(os.path.join(os.path.dirname(dirname),'tables/fastqc.yaml'), 'r') as io:
@@ -61,11 +62,29 @@ class fastqcParser(BaseParser):
         module_end_idx = [i for i, item in enumerate(lines) if re.search('^>>END_MODULE', item.decode('utf-8'))]
 
         for start, end, module in zip(module_start_idx[2:], module_end_idx[1:], metrics):
+            # pre-mapped column names
             columns = lines[start].decode('utf-8').lstrip('#').strip('\n').split('\t')
+
+            if self.build_ref and module not in self.ref_map:
+                metric_map = {}
+            else:
+                metric_map = self.ref_map[module]
+
+            new_cols = []
+            for column in columns:
+                if column in metric_map:
+                    new_cols.append(metric_map[column])
+                elif self.build_ref:
+                    new_col = self.get_mapped_val(module, column)
+                    metric_map[column] = new_col
+                    new_cols.append(new_col)
+                else:
+                    raise Exception('Metric type does not have a mapped code')
+
             rows = lines[start+1:end-1]
 
             # if no data right now JSON will be empty. OK solution?
-            
+
             # now want dictionary of sample_id, qc_program (fastqc), qc_metric (each metric), json
             self.metrics.append({'sample_id': self.sample_id, 'qc_program': 'fastqc', 'qc_metric': module,
-                'data': json_dump(columns, rows)})
+                'data': json_dump(new_cols, rows)})

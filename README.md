@@ -15,8 +15,11 @@
 [Docker Installation](https://docs.docker.com/docker-for-mac/install/)
 
 #### Install dependencies
+
+Pre-requisite of `pipenv` needed [pipenv](https://docs.pipenv.org/en/latest/)
+
 ```
-pip install mysql-connector-python sqlalchemy glob2 oyaml pandas dotenv
+pipenv install
 ```
 
 ## Development
@@ -66,7 +69,7 @@ docker-compose up
 
 #### Connect to Server
 ```
-docker-compose exec db mysql -p
+docker-compose exec mysql mysql -p
 ```
 Password: `password`
 
@@ -82,17 +85,10 @@ python -m qcdb.tables_create
 ```
 
 #### Load Data
+If loading for the first time or adding a new metric/file type, run with the `--buildref` flag.
 
 ```
 python -m qcdb.db_load
-```
-
-#### Running tests
-
-From the top level of the `qcdb` directory, run:
-
-```
-python -m pytest
 ```
 
 #### Running tests via Docker Compose

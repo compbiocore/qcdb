@@ -1,6 +1,6 @@
 import os
-import mysql.connector
 from qcdb.connection import connection
+import sqlalchemy
 import pytest
 import subprocess
 import time
@@ -14,6 +14,7 @@ def params():
     params_ = {'user': 'root',
               'password': 'password',
               'host': os.getenv("MYSQL_HOST"),
+              'port': 3306,
               'raise_on_warnings': True
               }
     return params_
@@ -21,8 +22,8 @@ def params():
 def test_connection(params):
     con = connection(params)
 
-    assert(type(con) == mysql.connector.connection_cext.CMySQLConnection)
-    assert(con.is_connected() == True)
+    assert(type(con) == sqlalchemy.engine.base.Connection)
+    assert(con.invalidated == False)
 
 
 def test_datsci_msql_conn(params):
@@ -33,5 +34,5 @@ def test_datsci_msql_conn(params):
 
         con = connection(params)
 
-        assert(type(con) == mysql.connector.connection_cext.CMySQLConnection)
-        assert(con.is_connected() == True)
+        assert(type(con) == sqlalchemy.engine.base.Connection)
+        assert(con.invalidated == False)
