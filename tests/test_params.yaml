@@ -6,12 +6,9 @@ db:
     user: root
     password: password
 files:
-  module:
-     - name: fastqc
-       directory: data
-  # module:
-  #   - name: picardtools
-  #   - directory: directory for picardtools results
-  #module:
-  #  - name: qckitfastq
-  #    directory: /Users/aguang/CORE/qckit/testdata/qcdb_test/qckitfastq_test
+  - name: fastqc
+    directory: data
+  - name: picardtools
+    directory: data
+  - name: qckitfastq
+    directory: data

@@ -1,14 +1,14 @@
 db:
   name: qcdb
   params:
-    host: 0.0.0.0
+    host: 127.0.0.1
     port: 3306
     user: root
     password: password
 files:
   - name: fastqc
-    directory: /Users/aguang/CORE/qckit/qcdb/tests/data
+    directory: /Users/aguang/CORE/qckit/qcdb/tests/data/
   - name: qckitfastq
-    directory: /Users/aguang/CORE/qckit/qcdb/tests/data
+    directory: /Users/aguang/CORE/qckit/qcdb/tests/data/
   - name: picardtools
-    directory: directory for picardtools results
+    directory: /Users/aguang/CORE/qckit/qcdb/tests/data/

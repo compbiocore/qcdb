@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pytest = "==3.6"
+codecov = "*"
+pytest-cov = "*"
+python-dotenv = "*"
+
+[packages]
+sqlalchemy = "*"
+glob2 = "*"
+oyaml = "*"
+pandas = "*"
+mysql-connector-python = "*"
+
+[requires]
+python_version = "3.7"

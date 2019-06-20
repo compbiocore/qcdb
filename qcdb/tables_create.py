@@ -51,7 +51,10 @@ def tables(metadata):
     reference = Table('reference', metadata,
         Column('qc_program', String(50), primary_key=True),
         Column('qc_metric', String(50), primary_key=True),
-        Column('experiment_type', String(50), nullable=False))
+        Column('field_name', String(50), primary_key=True),
+        Column('field_code', String(5)),
+        Column('display_name', String(50))
+        )
 
     metrics = Table('metrics', metadata,
         Column('_id', Integer, primary_key=True),
@@ -66,6 +69,7 @@ def tables(metadata):
 
     return metadata
 
+<<<<<<< HEAD
 
 def populate(session, metadata, reference_yaml):
     log.info("Populating reference...")
@@ -80,6 +84,8 @@ def populate(session, metadata, reference_yaml):
         session.commit()
 
 
+=======
+>>>>>>> f9d205626444beb07558b8be3d260c7d5490562e
 def main(config):
 
     with open(config, 'r') as io:
@@ -98,9 +104,6 @@ def main(config):
     log.info("Making tables...")
     metadata = tables(MetaData())
     metadata.create_all(conn, checkfirst=True)
-
-    session = Session(bind=conn)
-    populate(session, metadata, os.path.join(dirname,"reference.yaml"))
 
 if __name__ == '__main__':
     args = parser.parse_args()

@@ -1,19 +1,24 @@
-from sqlalchemy import create_engine
-import pymysql
+import sqlalchemy
 
 def connection(params={'user':'root',
                        'password':'password',
                        'host':'0.0.0.0',
-                       'port': '3306'
+                       'port': '3306',
                       },
                db=False):
 
-    str_ = 'mysql+pymysql://{0}:{1}@{2}:{3}'.format(params['user'],
-                                           params['password'],
-                                           params['host'],
-                                           params['port'])
     if db:
-        str_ = '{0}/{1}'.format(str_, db)
+        params['db'] = db
+    else:
+        params['db'] = None
 
-    engine = create_engine(str_)
-    return engine.connect()
+    try:
+        url = sqlalchemy.engine.url.URL('mysql+mysqlconnector', username=params['user'], password=params['password'], host=params['host'], port=params['port'], database=params['db'])
+        engine = sqlalchemy.create_engine(url)
+        con = engine.connect()
+    except:
+        url = sqlalchemy.engine.url.URL('mysql+mysqlconnector', username=params['user'], password=params['password'], host=params['host'], port=params['port'], database=params['db'], query={'auth_plugin': 'mysql_clear_password'})
+        engine = sqlalchemy.create_engine(url)
+        con = engine.connect()
+
+    return con
