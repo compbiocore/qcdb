@@ -1,0 +1,136 @@
+"adapter","count"
+"ABI Dynabead EcoP Oligo",0
+"ABI Solid3 3' AMP Primer",0
+"ABI Solid3 5' AMP Primer",0
+"ABI Solid3 Adapter A",0
+"ABI Solid3 Adapter B",0
+"ABI Solid3 EF1 alpha Antisense Primer",0
+"ABI Solid3 EF1 alpha Sense Primer",0
+"ABI Solid3 GAPDH Forward Primer",0
+"ABI Solid3 GAPDH Reverse Primer",0
+"Illumina 5p RNA Adapter",0
+"Illumina DpnII Gex Adapter 1",0
+"Illumina DpnII Gex Adapter 1.01",0
+"Illumina DpnII Gex Adapter 2",2
+"Illumina DpnII Gex Adapter 2.01",0
+"Illumina DpnII Gex PCR Primer 1",2
+"Illumina DpnII Gex PCR Primer 2",0
+"Illumina DpnII Gex Sequencing Primer",0
+"Illumina DpnII expression Adapter 1",0
+"Illumina DpnII expression Adapter 2",2
+"Illumina DpnII expression PCR Primer 1",2
+"Illumina DpnII expression PCR Primer 2",0
+"Illumina DpnII expression Sequencing Primer",0
+"Illumina Multiplexing Adapter 1",0
+"Illumina Multiplexing Adapter 2",5
+"Illumina Multiplexing Index Sequencing Primer",0
+"Illumina Multiplexing PCR Primer 1.01",3
+"Illumina Multiplexing PCR Primer 2.01",0
+"Illumina Multiplexing Read1 Sequencing Primer",5
+"Illumina Multiplexing Read2 Sequencing Primer",0
+"Illumina NlaIII Gex Adapter 1.01",0
+"Illumina NlaIII Gex Adapter 1.02",0
+"Illumina NlaIII Gex Adapter 2.01",2
+"Illumina NlaIII Gex Adapter 2.02",0
+"Illumina NlaIII Gex PCR Primer 1",2
+"Illumina NlaIII Gex PCR Primer 2",0
+"Illumina NlaIII Gex Sequencing Primer",0
+"Illumina NlaIII expression Adapter 1",0
+"Illumina NlaIII expression Adapter 2",2
+"Illumina NlaIII expression PCR Primer 1",2
+"Illumina NlaIII expression PCR Primer 2",0
+"Illumina NlaIII expression Sequencing Primer",0
+"Illumina PCR Primer Index 1",0
+"Illumina PCR Primer Index 10",0
+"Illumina PCR Primer Index 11",0
+"Illumina PCR Primer Index 12",0
+"Illumina PCR Primer Index 2",0
+"Illumina PCR Primer Index 3",0
+"Illumina PCR Primer Index 4",0
+"Illumina PCR Primer Index 5",0
+"Illumina PCR Primer Index 6",0
+"Illumina PCR Primer Index 7",0
+"Illumina PCR Primer Index 8",0
+"Illumina PCR Primer Index 9",0
+"Illumina Paired End Adapter 1",5
+"Illumina Paired End Adapter 2",2
+"Illumina Paired End PCR Primer 1",3
+"Illumina Paired End PCR Primer 2",0
+"Illumina Paired End Sequencing Primer 1",5
+"Illumina Paired End Sequencing Primer 2",0
+"Illumina RNA Adapter1",0
+"Illumina RNA PCR Primer",0
+"Illumina RNA RT Primer",0
+"Illumina Single End Adapter 1",0
+"Illumina Single End Adapter 2",2
+"Illumina Single End PCR Primer 1",3
+"Illumina Single End PCR Primer 2",2
+"Illumina Single End Sequencing Primer",5
+"Illumina Small RNA 3p Adapter 1",0
+"Illumina Small RNA Adapter 1",0
+"Illumina Small RNA Adapter 2",0
+"Illumina Small RNA PCR Primer 1",2
+"Illumina Small RNA PCR Primer 2",0
+"Illumina Small RNA RT Primer",2
+"Illumina Small RNA Sequencing Primer",0
+"RNA PCR Primer, Index 1",0
+"RNA PCR Primer, Index 10",0
+"RNA PCR Primer, Index 11",0
+"RNA PCR Primer, Index 12",0
+"RNA PCR Primer, Index 13",0
+"RNA PCR Primer, Index 14",0
+"RNA PCR Primer, Index 15",0
+"RNA PCR Primer, Index 16",0
+"RNA PCR Primer, Index 17",0
+"RNA PCR Primer, Index 18",0
+"RNA PCR Primer, Index 19",0
+"RNA PCR Primer, Index 2",0
+"RNA PCR Primer, Index 20",0
+"RNA PCR Primer, Index 21",0
+"RNA PCR Primer, Index 22",0
+"RNA PCR Primer, Index 23",0
+"RNA PCR Primer, Index 24",0
+"RNA PCR Primer, Index 25",0
+"RNA PCR Primer, Index 26",0
+"RNA PCR Primer, Index 27",0
+"RNA PCR Primer, Index 28",0
+"RNA PCR Primer, Index 29",0
+"RNA PCR Primer, Index 3",0
+"RNA PCR Primer, Index 30",0
+"RNA PCR Primer, Index 31",0
+"RNA PCR Primer, Index 32",0
+"RNA PCR Primer, Index 33",0
+"RNA PCR Primer, Index 34",0
+"RNA PCR Primer, Index 35",0
+"RNA PCR Primer, Index 36",0
+"RNA PCR Primer, Index 37",0
+"RNA PCR Primer, Index 38",0
+"RNA PCR Primer, Index 39",0
+"RNA PCR Primer, Index 4",0
+"RNA PCR Primer, Index 40",0
+"RNA PCR Primer, Index 41",0
+"RNA PCR Primer, Index 42",0
+"RNA PCR Primer, Index 43",0
+"RNA PCR Primer, Index 44",0
+"RNA PCR Primer, Index 45",0
+"RNA PCR Primer, Index 46",0
+"RNA PCR Primer, Index 47",0
+"RNA PCR Primer, Index 48",0
+"RNA PCR Primer, Index 5",0
+"RNA PCR Primer, Index 6",0
+"RNA PCR Primer, Index 7",0
+"RNA PCR Primer, Index 8",0
+"RNA PCR Primer, Index 9",0
+"TruSeq Adapter, Index 1",0
+"TruSeq Adapter, Index 10",0
+"TruSeq Adapter, Index 11",0
+"TruSeq Adapter, Index 12",0
+"TruSeq Adapter, Index 2",0
+"TruSeq Adapter, Index 3",0
+"TruSeq Adapter, Index 4",0
+"TruSeq Adapter, Index 5",0
+"TruSeq Adapter, Index 6",0
+"TruSeq Adapter, Index 7",0
+"TruSeq Adapter, Index 8",0
+"TruSeq Adapter, Index 9",0
+"TruSeq Universal Adapter",3

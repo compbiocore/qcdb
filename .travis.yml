@@ -1,0 +1,19 @@
+language: python
+dist: trusty
+os:
+  - linux
+sudo: required
+python:
+  - "3.6"
+
+services:
+  - docker
+
+before_script:
+  - sudo service mysql stop
+
+script:
+  - docker-compose run test
+
+after_success:
+  - docker-compose run coverage

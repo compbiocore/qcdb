@@ -1,3 +1,11 @@
+## Master
+
+[![Build Status](https://travis-ci.org/compbiocore/qcdb.svg?branch=master)](https://travis-ci.org/compbiocore/qcdb)
+
+## Devel
+
+[![Build Status](https://travis-ci.org/compbiocore/qcdb.svg?branch=devel)](https://travis-ci.org/compbiocore/qcdb)
+
 # QCDB Development
 
 ## Prerequisites
@@ -7,9 +15,11 @@
 [Docker Installation](https://docs.docker.com/docker-for-mac/install/)
 
 #### Install dependencies
+
+Pre-requisite of `pipenv` needed [pipenv](https://docs.pipenv.org/en/latest/)
+
 ```
-pip install sqlalchemy
-pip install pymysql
+pipenv install
 ```
 
 ## Development
@@ -24,6 +34,37 @@ pip install commitizen
 To commit, instead of `git commit -m` use `cz commit`.
 For more information, [read here.](https://compbiocore.github.io/cbc-documentation-templates/semantic_release/)
 
+## Usage
+
+All commands below need to be run from the top-level directory of this repository. All aspects related to starting and connection to the MySQL server are handled in the file `params.yaml`. The structure of the `params.yaml` file should look like the following:
+```yaml
+db:
+  name: qcdb
+  params:
+    host: 127.0.0.1
+    port: 3306
+    user: root
+    password: password
+files:
+  - name: fastqc
+    directory: /Users/aguang/CORE/qckit/qcdb/tests/data/
+  - name: qckitfastq
+    directory: /Users/aguang/CORE/qckit/qcdb/tests/data/
+  - name: picardtools
+    directory: /Users/aguang/CORE/qckit/qcdb/tests/data/
+
+```
+
+Each module run in the commands below also take a `-f` argument which by default is set to the top-level `params.yaml`. Thus no additional arguments need to be provided. However, if the user wishes to provide a yaml file from a different location, that is possible by providing commands like the following:
+
+**NOTE:** to take advantage of the pipenv installation, enter a `pipenv shell` before running the python commands
+
+
+```
+python -m qcdb.db_create -f path/to/params.yaml
+```
+
+Additionally, code will likely only run for Python 3+.
 
 #### Start MySQL Server
 ```
@@ -32,22 +73,32 @@ docker-compose up
 
 #### Connect to Server
 ```
-docker-compose exec db mysql -p
+docker-compose exec mysql mysql -p
 ```
 Password: `password`
 
 #### Create database
 From another terminal window:
 ```
-python src/db_create.py
+python -m qcdb.db_create
 ```
 
 #### Create tables
 ```
-python src/tables_create.py
+python -m qcdb.tables_create
 ```
 
-#### Insert Data
+#### Load Data
+If loading for the first time or adding a new metric/file type, run with the `--buildref` flag.
+
 ```
-python src/insert.py
+python -m qcdb.db_load
 ```
+
+#### Running tests via Docker Compose
+
+```
+docker-compose run test
+```
+
+For testing the connection, create a `.env` file in the `tests` folder with `MYSQLUSER` and `MYSQLPASSWORD` used to connect to the datasci mysql server.
