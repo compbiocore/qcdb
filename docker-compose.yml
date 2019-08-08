@@ -26,4 +26,6 @@ services:
 
   coverage:
     <<: *py3
-    command: codecov
+    command: pipenv run codecov
+    environment:
+      CODECOV_TOKEN: $CODECOV_TOKEN

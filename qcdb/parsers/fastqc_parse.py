@@ -53,8 +53,8 @@ class fastqcParser(BaseParser):
             #  '>>Adapter Content\tpass\n',
             #  '>>Kmer Content\tfail\n']
 
-        module_start_idx = [i for i, item in enumerate(lines) if re.search('#', item.decode('utf-8'))]
-        del(module_start_idx[9]) # sequence duplication levels has two comment lines so we wonly want the last one
+        module_start_idx = [i for i, item in enumerate(lines) if re.search(r"(^#(?!(Total\sDeduplicated\sPercentage\s).*))", item.decode('utf-8'))]
+        #del(module_start_idx[9]) # sequence duplication levels has two comment lines so we only want the last one, now achieved through a regex rather than accessing elements of the list
         module_end_idx = [i for i, item in enumerate(lines) if re.search('^>>END_MODULE', item.decode('utf-8'))]
 
         for start, end, module in zip(module_start_idx[2:], module_end_idx[1:], metrics):
