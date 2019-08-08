@@ -1,10 +1,10 @@
 ## Master
 
-[![Build Status](https://travis-ci.org/compbiocore/qcdb.svg?branch=master)](https://travis-ci.org/compbiocore/qcdb)[![codecov](https://codecov.io/gh/compbiocore/qcdb/branch/master/graph/badge.svg)](https://codecov.io/gh/compbiocore/qcdb)
+[![Build Status](https://travis-ci.org/compbiocore/qcdb.svg?branch=master)](https://travis-ci.org/compbiocore/qcdb) [![codecov](https://codecov.io/gh/compbiocore/qcdb/branch/master/graph/badge.svg)](https://codecov.io/gh/compbiocore/qcdb)
 
 ## Devel
 
-[![Build Status](https://travis-ci.org/compbiocore/qcdb.svg?branch=devel)](https://travis-ci.org/compbiocore/qcdb)[![codecov](https://codecov.io/gh/compbiocore/qcdb/branch/devel/graph/badge.svg)](https://codecov.io/gh/compbiocore/qcdb/branch/devel)
+[![Build Status](https://travis-ci.org/compbiocore/qcdb.svg?branch=devel)](https://travis-ci.org/compbiocore/qcdb) [![codecov](https://codecov.io/gh/compbiocore/qcdb/branch/devel/graph/badge.svg)](https://codecov.io/gh/compbiocore/qcdb/branch/devel)
 
 # QCDB Development
 
