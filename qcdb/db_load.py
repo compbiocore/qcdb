@@ -9,6 +9,7 @@ import argparse
 import logging
 #import sys
 #import json
+from qcdb.sra_metadata import sra_metadata
 from qcdb.parsers.qckitfastq_parse import qckitfastqParser
 from qcdb.parsers.fastqc_parse import fastqcParser
 from qcdb.parsers.picardtools_parse import picardtoolsParser
@@ -28,41 +29,29 @@ parser.add_argument('--buildref', '-r', help='Flag to build reference table from
 
 def insert(results, m, session):
     s = m.tables['samplemeta']
-    # check if sample_id is in table already
-    q = session.query(s).filter(s.c.sample_id==results.sample_id)
+    # check if db_id is in table already
+    q = session.query(s).filter(s.c.db_id==results.db_id)
     if not session.query(q.exists()).scalar():
-        log.info("Loading {} into metadata...".format(results.sample_id))
-        session.execute(s.insert().values(sample_id=results.sample_id,
-            sample_name=results.sample_name,
-            library_read_type=results.library_read_type,
-            experiment=results.experiment))
-        session.commit()
+        log.info("Loading {} into metadata...".format(results.db_id))
+        sra_m = sra_metadata(results.db_id)
+        sra_m['db_id'] = results.db_id
+        sra_m['sample_id'] = results.sample_id
+        sra_m['experiment_id'] = results.experiment
+        try:
+            session.execute(s.insert().values(sra_m))
+            session.commit()
+        except:
+            log.error("Error of type: ", sys.exc_info()[0], sys.exc_info()[1])
 
     metrics = m.tables['metrics']
-    log.info("Loading {} results for sample {} into metrics...".format(
-        results.qc_program,results.sample_id))
+    log.info("Loading {} results for db_id {} into metrics...".format(
+        results.qc_program,results.db_id))
     try:
         session.execute(metrics.insert(), results.metrics)
         session.commit()
     except:
-        log.error("Data already exists for {}...".format(results.sample_id))
-
-# temporary solution to get file handles for
-# qckitfastqParser and picardToolsParser
-def split_helper(files):
-    unique_files = set()
-    for f in files:
-        base_file = os.path.basename(f)
-        dirname = os.path.dirname(f)
-        spl = base_file.split('_')
-        if spl[2][0].isalpha():
-            s = spl[:2]
-            s.append("se")
-            unique_files.add(os.path.join(dirname,"_".join(s)))
-        else:
-            s = spl[:3]
-            unique_files.add(os.path.join(dirname,"_".join(s)))
-    return unique_files
+        raise Exception('Data already exists')
+        log.error("Data already exists for {}...".format(results.db_id))
 
 def dispatch_parse(directory, module_name, module_glob, module_fn, session, m, refs, build_ref):
     files = glob2.glob(os.path.join(directory, module_glob))

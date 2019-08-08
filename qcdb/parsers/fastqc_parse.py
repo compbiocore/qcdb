@@ -82,6 +82,6 @@ class fastqcParser(BaseParser):
 
             # if no data right now JSON will be empty. OK solution?
 
-            # now want dictionary of sample_id, qc_program (fastqc), qc_metric (each metric), json
-            self.metrics.append({'sample_id': self.sample_id, 'qc_program': 'fastqc', 'qc_metric': module,
+            # now want dictionary of db_id, qc_program (fastqc), qc_metric (each metric), json
+            self.metrics.append({'db_id': self.db_id, 'qc_program': 'fastqc', 'qc_metric': module,
                 'data': json_dump(new_cols, rows)})

@@ -50,7 +50,7 @@ files:
     - name: fastqc
     - directory: /Users/aguang/CORE/qckit/qcdb/tests/data
   module:
-  	- name qckitfastq
+  	- name: qckitfastq
   	- directory: /Users/aguang/CORE/qckit/qcdb/tests/data
 ```
 
@@ -73,15 +73,10 @@ docker-compose exec mysql mysql -p
 ```
 Password: `password`
 
-#### Create database
+#### Create database and tables
 From another terminal window:
 ```
 python -m qcdb.db_create
-```
-
-#### Create tables
-```
-python -m qcdb.tables_create
 ```
 
 #### Load Data
