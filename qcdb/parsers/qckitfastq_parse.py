@@ -24,9 +24,9 @@ class qckitfastqParser(BaseParser):
 
         base_file = os.path.basename(file_handle)
         if self.library_read_type == 'single ended':
-            file_type = base_file.split('{}_{}_'.format(self.sample_name,self.experiment))[1]
+            file_type = base_file.split('{}_{}_'.format(self.sample_id,self.experiment))[1]
         else:
-            file_type = base_file.split('{}_{}_?_'.format(self.sample_name,self.experiment))[1]
+            file_type = base_file.split('{}_{}_?_'.format(self.sample_id,self.experiment))[1]
         metric = file_table_dict[file_type[:-4]]
 
         self.parse(metric, file_handle)
@@ -58,5 +58,5 @@ class qckitfastqParser(BaseParser):
 
             new_csv_reader = csv.DictReader(csv_file, fieldnames=new_cols)
 
-            self.metrics.append({'sample_id': self.sample_id, 'qc_program': 'qckitfastq', 'qc_metric': module,
+            self.metrics.append({'db_id': self.db_id, 'qc_program': 'qckitfastq', 'qc_metric': module,
             'data': json.loads(json.dumps([ row for row in new_csv_reader ]))})

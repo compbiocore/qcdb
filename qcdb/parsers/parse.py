@@ -19,22 +19,15 @@ class BaseParser(object):
         self.qc_program = qc_program
         base_file = os.path.basename(file_handle)
         sample, experiment, library_read_type = self.get_metadata(base_file)
-        self.sample_id = self.sample_id(sample, experiment, library_read_type)
-        self.sample_name = sample
+        #self.sample_id = experiment + "_" + sample
+        self.db_id = self.db_id(sample, experiment, library_read_type)
+        self.sample_id = sample
         self.experiment = experiment
         self.library_read_type = self.get_library_read_type(library_read_type)
         self.session = session
         self.ref_table = ref_table
         self.build_ref = build_ref
         self.ref_map = self.get_reference_map()
-
-    def change_type(self, type_):
-        if type_ == 'Integer':
-            return int
-        if type_ == 'Float':
-            return float
-        else:
-            return str
 
     def get_metadata(self, base_file):
         sample=base_file.split('_')[0]
@@ -47,7 +40,7 @@ class BaseParser(object):
                 experiment,
                 library_read_type)
 
-    def sample_id(self, sample, experiment, library_read_type):
+    def db_id(self, sample, experiment, library_read_type):
         return(sample+'_'+experiment+'_'+library_read_type)
 
 
@@ -127,24 +120,3 @@ class BaseParser(object):
             self.session.execute(self.ref_table.insert(), [{'qc_program':self.qc_program, 'qc_metric':metric_type, 'field_name':field_name, 'field_code':new_val, 'display_name':field_name}])
             self.session.commit()
             return new_val
-
-
-    # create metadata table
-    def metadata(self, directory):
-        files = glob2.glob(os.path.join(directory, '*'))
-        log.info("files: {}".format(files))
-        metadata_df = pd.DataFrame()
-        for f in files:
-            base_file = os.path.basename(f)
-
-            sample, experiment, library_read_type = self.get_metadata(base_file)
-            _id = self.sample_id(sample, experiment, library_read_type)
-
-            row = pd.DataFrame({'sample_id': _id,
-                                 'sample_name': sample,
-                                 'library_read_type': self.get_library_read_type(base_file),
-                                 'experiment': experiment}, index=[0])
-
-            metadata_df = metadata_df.append(row)
-
-        return metadata_df.drop_duplicates()

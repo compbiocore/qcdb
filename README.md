@@ -1,10 +1,10 @@
 ## Master
 
-[![Build Status](https://travis-ci.org/compbiocore/qcdb.svg?branch=master)](https://travis-ci.org/compbiocore/qcdb)
+[![Build Status](https://travis-ci.org/compbiocore/qcdb.svg?branch=master)](https://travis-ci.org/compbiocore/qcdb) [![codecov](https://codecov.io/gh/compbiocore/qcdb/branch/master/graph/badge.svg)](https://codecov.io/gh/compbiocore/qcdb)
 
 ## Devel
 
-[![Build Status](https://travis-ci.org/compbiocore/qcdb.svg?branch=devel)](https://travis-ci.org/compbiocore/qcdb)
+[![Build Status](https://travis-ci.org/compbiocore/qcdb.svg?branch=devel)](https://travis-ci.org/compbiocore/qcdb) [![codecov](https://codecov.io/gh/compbiocore/qcdb/branch/devel/graph/badge.svg)](https://codecov.io/gh/compbiocore/qcdb/branch/devel)
 
 # QCDB Development
 
@@ -52,7 +52,6 @@ files:
     directory: /Users/aguang/CORE/qckit/qcdb/tests/data/
   - name: picardtools
     directory: /Users/aguang/CORE/qckit/qcdb/tests/data/
-
 ```
 
 Each module run in the commands below also take a `-f` argument which by default is set to the top-level `params.yaml`. Thus no additional arguments need to be provided. However, if the user wishes to provide a yaml file from a different location, that is possible by providing commands like the following:
@@ -77,15 +76,10 @@ docker-compose exec mysql mysql -p
 ```
 Password: `password`
 
-#### Create database
+#### Create database and tables
 From another terminal window:
 ```
 python -m qcdb.db_create
-```
-
-#### Create tables
-```
-python -m qcdb.tables_create
 ```
 
 #### Load Data
