@@ -3,13 +3,18 @@ from sqlalchemy.orm import Session
 import oyaml as yaml
 import pytest
 import os
-from qcdb.tables_create import tables
-from qcdb.db_load import parse
+from qcdb.db_create import tables, db_create
+from qcdb.connection import connection
+
+from dotenv import load_dotenv
+load_dotenv()
 
 @pytest.fixture
 def test_yaml():
 	dirname = os.path.dirname(__file__)
-	return(os.path.join(dirname,'test_params.yaml'))
+	with open(os.path.join(dirname, 'test_params.yaml'), 'r') as io:
+		d = yaml.load(io, Loader=yaml.FullLoader)
+		return(d)
 
 @pytest.fixture
 def test_data():
@@ -17,46 +22,59 @@ def test_data():
 	return(os.path.join(dirname,'data'))
 
 @pytest.fixture(scope='session')
-def connection(request, tmpdir_factory):
-	#engine = create_engine('mysql+pymysql://root:password@0.0.0.0:3306/qcdb')
-	fn = tmpdir_factory.mktemp('db').join('test.db')
-	engine = create_engine('sqlite:///'+str(fn))
+def con(request):
+    params = {'user': 'root',
+              'password': 'password',
+              'host': os.getenv("MYSQL_HOST"),
+              'port': 3306,
+              'raise_on_warnings': True
+              }
 
-	metadata = MetaData()
-	metadata = tables(metadata)
-	metadata.create_all(engine)
+    try:
+        con = connection(params,db="test")
+    except:
+        db_create(params,db="test")
+        con = connection(params,db="test")
 
-	connection = engine.connect()
-	# this finalizer for dropping the tables isn't working, not sure why
-	#request.addfinalizer(metadata.drop_all(engine))
-	return connection
+    metadata = tables(MetaData())
+    metadata.create_all(con, checkfirst=True)
+
+    # need to work on this as right now the db doesn't get
+    # deleted
+    def teardown():
+         con = connection(params,db="test")
+         con.execute("drop database test;")
+         con.close()
+
+    request.addfinalizer(teardown)
+    return con
 
 @pytest.fixture(scope='session')
-def metadata(connection):
+def metadata(con):
 	m = MetaData()
-	m.reflect(bind=connection)
+	m.reflect(bind=con)
 	return(m)
+
 
 # Tests that there are only 3 tables
 def test_3_tables(metadata):
 	tables = metadata.tables.keys()
 	assert(len(tables)==3)
 
-# not really in use but works
 @pytest.fixture(scope='session')
-def session(connection, request):
-	transaction = connection.begin()
-	session = Session(bind=connection)
+def session(con, request):
+	transaction = con.begin()
+	session = Session(bind=con)
 
 	def teardown():
 		session.close()
 		transaction.rollback()
-		connection.close()
+		con.close()
 
 	request.addfinalizer(teardown)
 	return session
 
-# TEST PARSERS
+# # TEST PARSERS
 
 import glob2
 import os
@@ -82,10 +100,10 @@ def test_fastqcparser(session, metadata):
 		results.append(fastqcParser(f, session, metadata.tables['reference'], true))
 	for r in results:
 		assert(isinstance(r, fastqcParser))
-		assert(r.sample_name.startswith('SRS'))
+		assert(r.sample_id.startswith('SRS'))
 		assert(r.experiment.startswith('SRX'))
 		# don't have paired end test files right now
-		assert(r.sample_id.split('_')[2]=='se')
+		assert(r.db_id.split('_')[2]=='se')
 		assert(r.library_read_type=='single ended')
 		# FASTQC has 11 modules
 		# could do this based off of the tables YAML as an auto check
@@ -101,14 +119,39 @@ def test_fastqcparser(session, metadata):
 
 def test_qckitfastqparser(session, metadata):
 	results = qckitfastqParser(os.path.join(dirname, 'data', 'SRS643403_SRX612437_overrep_kmer.csv'), session, metadata.tables['reference'], true)
-	assert(results.sample_name.startswith('SRS'))
+	assert(results.sample_id.startswith('SRS'))
 	assert(results.experiment.startswith('SRX'))
-	assert(results.sample_id.split('_')[2]=='se')
+	assert(results.db_id.split('_')[2]=='se')
 	assert(results.library_read_type=='single ended')
 	assert(len(results.metrics)==1)
 
 def test_picardtoolsparser(session, metadata):
     results = picardtoolsParser(os.path.join(dirname, 'data', 'SRS999999_SRX999999_summary_gcbias_metrics_picard.txt'), session, metadata.tables['reference'], true)
-    assert(results.sample_name.startswith('SRS'))
+    assert(results.sample_id.startswith('SRS'))
     assert(results.experiment.startswith('SRX'))
     assert(len(results.metrics) == 1)
+
+# # TEST DB_LOAD
+
+import qcdb.db_load as dbl
+
+def test_parse_nobuildref(metadata,session,test_yaml):
+	with pytest.raises(Exception):
+		session.execute("DELETE from references;")
+		dbl.parse(test_yaml,metadata,session,False)
+
+
+def test_insert(metadata,session):
+	results = fastqcParser(os.path.join(dirname,'data','SRS643404_SRX612438_fastqc.zip'), session, metadata.tables['reference'], False)
+	dbl.insert(results,metadata,session)
+	s = metadata.tables['samplemeta']
+	print(s.c.db_id)
+	q = session.query(s).filter(s.c.db_id=='SRS643404_SRX612438_se')
+	assert(session.query(q.exists()).scalar())
+
+	# test that double insert will raise exception
+	with pytest.raises(Exception):
+		dbl.insert(results,metadata,session)
+
+def test_parse(metadata,session,test_yaml):
+	dbl.parse(test_yaml,metadata,session,True)
