@@ -50,8 +50,8 @@ def insert(results, m, session):
         session.execute(metrics.insert(), results.metrics)
         session.commit()
     except:
-        raise Exception('Data already exists')
-        log.error("Data already exists for {}...".format(results.db_id))
+        log.error('Data already exists for {}'.format(results.db_id))
+        raise Exception("Data already exists")
 
 def dispatch_parse(directory, module_name, module_glob, module_fn, session, m, refs, build_ref):
     files = glob2.glob(os.path.join(directory, module_glob))
@@ -65,7 +65,9 @@ def dispatch_parse(directory, module_name, module_glob, module_fn, session, m, r
         try:
             insert(results, m, session)
         except:
-            log.error("Error in insert for {}...".format(f))
+            pass
+            #seems like uninformative error message
+            #log.error("Error in insert for {}...".format(f))
 
 # parse and load metadata
 def parse(d, m, session, build_ref):
