@@ -13,7 +13,7 @@ def test_yaml():
 		d = yaml.load(io, Loader=yaml.FullLoader)
 		return(d)
 
-@pytest.fixture
+@pytest.fixture()
 def test_data():
 	dirname = os.path.dirname(__file__)
 	return(os.path.join(dirname,'data'))
