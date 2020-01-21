@@ -22,15 +22,10 @@ class fastqcParser(BaseParser):
         log.info("Initializing fastqcParser for {}...".format(file_handle))
         BaseParser.__init__(self,file_handle,'fastqc', session, ref_table, build_ref)
 
-        metrics = ['basequal', 'tilequal', 'seqqual', 'perbaseseqcontent',
-            'gccontent', 'perbaseNcontent', 'seqlength', 'seqdup', 'overseqs',
-            'adaptcontent', 'kmercount']
-
-        self.parse(file_handle, metrics)
+        self.parse(file_handle)
 
     # data parse
-    # largely taken from: https://github.com/compbiocore/bioflows/blob/master/bioflows/bioutils/parse_fastqc/parsefastqc.py
-    def parse(self, file, metrics):
+    def parse(self, file):
         '''
         read in the results in zipfile and return parsed file
         :return: list of output and tuple with location of modules
@@ -39,32 +34,30 @@ class fastqcParser(BaseParser):
         results_idx = next((i for i, item in enumerate(zp.namelist()) if re.search('fastqc_data.txt',item)), None)
         lines = zp.open(zp.namelist()[results_idx]).readlines()
 
-        # Generate a tuple for the start and end locs of the modules 12 in total
-            # ['>>Basic Statistics\tpass\n',
-            #  '>>Per base sequence quality\tpass\n',
-            #  '>>Per tile sequence quality\twarn\n',
-            #  '>>Per sequence quality scores\tpass\n',
-            #  '>>Per base sequence content\twarn\n',
-            #  '>>Per sequence GC content\tpass\n',
-            #  '>>Per base N content\tpass\n',
-            #  '>>Sequence Length Distribution\tpass\n',
-            #  '>>Sequence Duplication Levels\tfail\n',
-            #  '>>Overrepresented sequences\twarn\n',
-            #  '>>Adapter Content\tpass\n',
-            #  '>>Kmer Content\tfail\n']
-
-        module_start_idx = [i for i, item in enumerate(lines) if re.search(r"(^#(?!(Total\sDeduplicated\sPercentage\s).*))", item.decode('utf-8'))]
-        #del(module_start_idx[9]) # sequence duplication levels has two comment lines so we only want the last one, now achieved through a regex rather than accessing elements of the list
         module_end_idx = [i for i, item in enumerate(lines) if re.search('^>>END_MODULE', item.decode('utf-8'))]
+        module_start_idx = [i+1 for i in module_end_idx]
+        metrics = modules(module_start_idx[:-1],lines)
 
-        for start, end, module in zip(module_start_idx[2:], module_end_idx[1:], metrics):
-            # pre-mapped column names
+        for start, end, module in zip(module_start_idx[:-1], module_end_idx[1:], metrics):
+            start = start+1 # column names are line after start
+
+            # some edge cases
+            if module=='seqdup': # sequence duplicaiton levels come with two comment lines
+                start = start+1 # so we just keep the last one for column names
+
+            if start==end: # if module is empty, like overrep sequences
+                continue
+
             columns = lines[start].decode('utf-8').lstrip('#').strip('\n').split('\t')
 
             if self.build_ref and module not in self.ref_map:
                 metric_map = {}
             else:
-                metric_map = self.ref_map[module]
+                try:
+                    metric_map = self.ref_map[module]
+                except:
+                    log.error("No reference map (maybe you need to run with --buildref flag)")
+                    raise Exception('No reference map')
 
             new_cols = []
             for column in columns:
@@ -79,9 +72,52 @@ class fastqcParser(BaseParser):
                     raise Exception('Metric type does not have a mapped code')
 
             rows = lines[start+1:end-1]
-
             # if no data right now JSON will be empty. OK solution?
 
             # now want dictionary of db_id, qc_program (fastqc), qc_metric (each metric), json
             self.metrics.append({'db_id': self.db_id, 'qc_program': 'fastqc', 'qc_metric': module,
+                'read_type': self.read_type,
                 'data': json_dump(new_cols, rows)})
+
+def modules(start, lines):
+    # Generate a tuple for the start and end locs of the modules 12 in total
+    # ['>>Basic Statistics\tpass\n',
+    #  '>>Per base sequence quality\tpass\n',
+    #  '>>Per tile sequence quality\twarn\n',
+    #  '>>Per sequence quality scores\tpass\n',
+    #  '>>Per base sequence content\twarn\n',
+    #  '>>Per sequence GC content\tpass\n',
+    #  '>>Per base N content\tpass\n',
+    #  '>>Sequence Length Distribution\tpass\n',
+    #  '>>Sequence Duplication Levels\tfail\n',
+    #  '>>Overrepresented sequences\twarn\n',
+    #  '>>Adapter Content\tpass\n',
+    #  '>>Kmer Content\tfail\n']
+    modules = []
+    for i in start:
+        if lines[i].decode('utf-8').startswith(">>Per base sequence quality"):
+            modules.append('basequal')
+        elif lines[i].decode('utf-8').startswith(">>Per tile"):
+            modules.append('tilequal')
+        elif lines[i].decode('utf-8').startswith(">>Per sequence quality scores"):
+            modules.append('seqqual')
+        elif lines[i].decode('utf-8').startswith(">>Per base sequence content"):
+            modules.append('perbaseseqcontent')
+        elif lines[i].decode('utf-8').startswith(">>Per sequence GC content"):
+            modules.append('gccontent')
+        elif lines[i].decode('utf-8').startswith(">>Per base N content"):
+            modules.append('perbaseNcontent')
+        elif lines[i].decode('utf-8').startswith(">>Sequence Length Distribution"):
+            modules.append('seqlength')
+        elif lines[i].decode('utf-8').startswith(">>Sequence Duplication"):
+            modules.append('seqdup')
+        elif lines[i].decode('utf-8').startswith(">>Overrepresented sequences"):
+            modules.append('overseqs')
+        elif lines[i].decode('utf-8').startswith(">>Adapter"):
+            modules.append('adaptcontent')
+        elif lines[i].decode('utf-8').startswith(">>Kmer Content"):
+            modules.append('kmercount')
+        else:
+            raise Exception("No modules known to be fastqc found")
+            log.error("No modules known to be fastqc found")
+    return modules
