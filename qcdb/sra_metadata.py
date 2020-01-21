@@ -5,6 +5,7 @@ from Bio import Entrez
 from collections import OrderedDict
 #from xml.etree.ElementTree import fromstring
 #from xml.etree.ElementTree import ElementTree
+import time
 import xml.etree.ElementTree as ET
 from xmljson import Abdera  
 
@@ -32,6 +33,7 @@ def sra_query_xml(email, sample_id):
     # parsing metadata for each xml one would think
     xml_tables=[]
     for sra_id in sra_results['IdList']:
+        time.sleep(1)
         sra_fetch = Entrez.efetch(db='sra', id=sra_id, rettype='text', retmode='xml')
         xml_tables.append(sra_fetch.read())
     return(xml_tables)
