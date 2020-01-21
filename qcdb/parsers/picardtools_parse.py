@@ -14,10 +14,7 @@ class picardtoolsParser(BaseParser):
             'summary_gcbias_metrics_picard': 'gcbiasmetrics'}
 
         base_file = os.path.basename(file_handle)
-        if self.library_read_type == 'single ended':
-            file_type = base_file.split('{}_{}_'.format(self.sample_id,self.experiment))[1]
-        else:
-            file_type = base_file.split('{}_{}_?_'.format(self.sample_id,self.experiment))[1]
+        file_type = base_file.split('{}_{}_'.format(self.sample_id,self.experiment))[1]
         metric = file_table_dict[file_type[:-4]]
 
         self.parse(metric, file_handle)

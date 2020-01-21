@@ -65,11 +65,12 @@ def tables(metadata):
         Column('db_id', String(50), ForeignKey('samplemeta.db_id')),
         Column('qc_program', String(50)),
         Column('qc_metric', String(50)),
+        Column('read_type', Integer),
         Column('data', JSON),
         ForeignKeyConstraint(['qc_program', 'qc_metric'],
             ['reference.qc_program', 'reference.qc_metric']),
-        # db_id, qc_program, qc_metric combo must be unique
-        UniqueConstraint('db_id', 'qc_program', 'qc_metric'))
+        # db_id, qc_program, qc_metric, read_type combo must be unique
+        UniqueConstraint('db_id', 'qc_program', 'qc_metric', 'read_type'))
 
     return metadata
 
@@ -82,11 +83,12 @@ def db_create(params, db):
                                             params['port'],
                                             db))
 
-    try:
-        conn.execute("create database {};".format(db))
-        logging.info("Created database {}".format(db))
-    except sqlalchemy.exc.DatabaseError:
-        logging.info("Database {} already exists".format(db))
+#    try:
+    conn.execute("create database {};".format(db))
+    logging.info("Created database {}".format(db))
+    # appears to never get called...
+    #except sqlalchemy.exc.DatabaseError:
+    #    logging.info("Database {} already exists".format(db))
 
 def main(config):
 

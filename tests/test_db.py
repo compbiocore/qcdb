@@ -19,19 +19,30 @@ def test_parse_nobuildref(metadata,session,test_yaml):
 		dbl.parse(test_yaml,metadata,session,False)
 
 from qcdb.parsers.fastqc_parse import fastqcParser
+from qcdb.parsers.picardtools_parse import picardtoolsParser
 dirname = os.path.dirname(__file__)
 
-def test_insert(metadata,session):
+def test_insert_singleend(metadata,session):
 	results = fastqcParser(os.path.join(dirname,'data','SRS643404_SRX612438_fastqc.zip'), session, metadata.tables['reference'], True)
 	dbl.insert(results,metadata,session)
 	s = metadata.tables['samplemeta']
-	print(s.c.db_id)
-	q = session.query(s).filter(s.c.db_id=='SRS643404_SRX612438_se')
+	q = session.query(s).filter(s.c.db_id=='SRS643404_SRX612438', s.c.library_layout=='SINGLE')
 	assert(session.query(q.exists()).scalar())
 
 	# test that double insert will raise exception
 	with pytest.raises(Exception):
 		dbl.insert(results,metadata,session)
+
+def test_insert_pairedend(metadata,session):
+	fastqc_results_1 = fastqcParser(os.path.join(dirname,'data','SRS4814656_SRX5892975_1_fastqc.zip'), session, metadata.tables['reference'], True)
+	fastqc_results_2 = fastqcParser(os.path.join(dirname,'data','SRS4814656_SRX5892975_2_fastqc.zip'), session, metadata.tables['reference'], True)
+	picard_results = picardtoolsParser(os.path.join(dirname, 'data', 'SRS4814656_SRX5892975_alignment_summary_metrics_picard.txt'), session, metadata.tables['reference'], True)
+	dbl.insert(fastqc_results_1,metadata,session)
+	dbl.insert(fastqc_results_2,metadata,session)
+	dbl.insert(picard_results,metadata,session)
+	s = metadata.tables['samplemeta']
+	q = session.query(s).filter(s.c.db_id=='SRS4814656_SRX5892975', s.c.library_layout=='PAIRED')
+	assert(session.query(q.exists()).scalar())
 
 def test_parse(metadata,session,test_yaml):
 	dbl.parse(test_yaml,metadata,session,True)
