@@ -49,5 +49,5 @@ class picardtoolsParser(BaseParser):
         data_dictionary = dict(zip(new_cols, data))
         json_table = json.dumps(data_dictionary)
         picard_dict = dict(
-            {'db_id': self.db_id, 'qc_program': 'picard', 'qc_metric': module, 'data': json_table, 'read_type':'-1'})
+            {'db_id': self.db_id, 'qc_program': 'picard', 'qc_metric': module, 'data': json_table, 'read_type':-1})
         self.metrics.append(picard_dict)
