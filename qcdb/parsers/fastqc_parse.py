@@ -76,6 +76,7 @@ class fastqcParser(BaseParser):
 
             # now want dictionary of db_id, qc_program (fastqc), qc_metric (each metric), json
             self.metrics.append({'db_id': self.db_id, 'qc_program': 'fastqc', 'qc_metric': module,
+                'read_type': self.read_type,
                 'data': json_dump(new_cols, rows)})
 
 def modules(start, lines):
