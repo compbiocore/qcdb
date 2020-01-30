@@ -52,7 +52,7 @@ def test_insert_pairedend(test_data,metadata,session):
 	# check that there is read1 and read2 but also that picardtools is NULL
 	qm1 = session.query(m).filter(m.c.db_id==db_id, m.c.qc_program=='fastqc', m.c.read_type==1)
 	qm2 = session.query(m).filter(m.c.db_id==db_id, m.c.qc_program=='fastqc', m.c.read_type==2)
-	qm_picard = session.query(m).filter(m.c.db_id==db_id, m.c.qc_program=='picard', m.c.read_type==None)
+	qm_picard = session.query(m).filter(m.c.db_id==db_id, m.c.qc_program=='picard', m.c.read_type==-1)
 	assert(session.query(qm1.exists()).scalar())
 	assert(session.query(qm2.exists()).scalar())
 	assert(session.query(qm_picard.exists()).scalar())
