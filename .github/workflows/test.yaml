@@ -1,6 +1,6 @@
 name: Test CI 
 
-# Only trigger when push to dev is made 
+# Only trigger when push to devel is made - right now action is triggered with push to data folder on devel
 on:
   push:
     branches: 
