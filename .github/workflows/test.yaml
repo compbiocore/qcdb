@@ -5,8 +5,6 @@ on:
   push:
     branches: 
       - devel
-    paths:
-      - tests/data/**
 
 jobs:
   docker:
