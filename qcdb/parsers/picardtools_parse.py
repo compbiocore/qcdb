@@ -25,11 +25,9 @@ class picardtoolsParser(BaseParser):
         m = re.search(r"METRICS\sCLASS\s*(\w+)\.[^.]*\.(\w+)\n([^\n]+)\n(([^\n#]+\n)+)", content)
         #module = m.group(2)
         columns = m.group(3).split("\t")
-        d = m.group(4)
-        p = re.search(r"^(PAIR|UNPAIRED)[^\n]*", m.group(4), flags=re.M)
-        if p:
-            d = p.group(0)
-        data = d.strip("\n").split("\t")
+        d = m.group(0).split("\n")
+        rows = [element.split("\t") for element in d]
+        data = rows[2:len(rows)]
 
         if self.build_ref and module not in self.ref_map:
             metric_map = {}
@@ -51,5 +49,5 @@ class picardtoolsParser(BaseParser):
         data_dictionary = dict(zip(new_cols, data))
         json_table = json.dumps(data_dictionary)
         picard_dict = dict(
-            {'db_id': self.db_id, 'qc_program': 'picard', 'qc_metric': module, 'data': json_table})
+            {'db_id': self.db_id, 'qc_program': 'picard', 'qc_metric': module, 'data': json_table, 'read_type':-1})
         self.metrics.append(picard_dict)

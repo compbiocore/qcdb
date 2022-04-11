@@ -1,0 +1,19 @@
+name: Test CI 
+
+# Only trigger when push to devel is made - right now action is triggered with push to data folder on devel
+on:
+  push:
+    branches: 
+      - devel
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Start containers
+      run: docker-compose up  --force-recreate
+    
