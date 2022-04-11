@@ -35,7 +35,9 @@ class fastqcParser(BaseParser):
         lines = zp.open(zp.namelist()[results_idx]).readlines()
 
         module_end_idx = [i for i, item in enumerate(lines) if re.search('^>>END_MODULE', item.decode('utf-8'))]
-        module_start_idx = [i+1 for i in module_end_idx]
+        module_start_idx = [2]
+        module_start_idx_0 = [i+1 for i in module_end_idx]
+        module_start_idx.extend(module_start_idx_0)
         metrics = modules(module_start_idx[:-1],lines)
 
         for start, end, module in zip(module_start_idx[:-1], module_end_idx[1:], metrics):
