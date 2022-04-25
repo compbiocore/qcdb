@@ -1,6 +1,5 @@
-db_id: 
-  sample_id: H1-sc-1
-  experiment_id: 
+H1-sc-1:
+  db_id: 
   library_name: 
   library_strategy: RNA-Seq
   library_source: TRANSCRIPTOMIC
@@ -22,9 +21,8 @@ db_id:
   center_project_name: 
   submission_center: 
   submission_lab: 
-db_id: 
-  sample_id: H1-sc-2
-  experiment_id: 
+H1-sc-2: 
+  db_id:
   library_name: 
   library_strategy: RNA-Seq
   library_source: TRANSCRIPTOMIC
@@ -46,9 +44,8 @@ db_id:
   center_project_name: 
   submission_center: 
   submission_lab: 
-db_id: 
-  sample_id: H1-sc-3
-  experiment_id: 
+H1-sc-3: 
+  db_id:
   library_name: 
   library_strategy: RNA-Seq
   library_source: TRANSCRIPTOMIC

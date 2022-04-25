@@ -27,16 +27,18 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--file', '-f', help='Location of params.yaml', default='params.yaml')
 parser.add_argument('--buildref', '-r', help='Flag to build reference table from this session', action='store_true')
 
-def insert(results, m, session):
+def insert(results, m, session, metadata):
     s = m.tables['samplemeta']
     # check if db_id is in table already
     q = session.query(s).filter(s.c.db_id==results.db_id)
     if not session.query(q.exists()).scalar():
         log.info("Loading {} into metadata...".format(results.db_id))
-        sra_m = sra_metadata(results.db_id)
-        sra_m['db_id'] = results.db_id
-        sra_m['sample_id'] = results.sample_id
-        sra_m['experiment_id'] = results.experiment
+        metadata = metadata(results.db_id)
+
+        #sra_m = sra_metadata(results.db_id)
+        #sra_m['db_id'] = results.db_id
+        #sra_m['sample_id'] = results.sample_id
+        #sra_m['experiment_id'] = results.experiment
         try:
             session.execute(s.insert().values(sra_m))
             session.commit()
@@ -53,7 +55,7 @@ def insert(results, m, session):
         log.error('Data already exists for {}'.format(results.db_id))
         raise Exception("Data already exists")
 
-def dispatch_parse(directory, module_name, module_glob, module_fn, session, m, refs, build_ref):
+def dispatch_parse(directory, module_name, module_glob, module_fn, session, m, refs, build_ref, all_metadata):
     files = glob2.glob(os.path.join(directory, module_glob))
     if not files:
         log.error("No {0} output found in: {1}".format(module_name, directory))
@@ -63,27 +65,32 @@ def dispatch_parse(directory, module_name, module_glob, module_fn, session, m, r
         except:
             log.error("Error in parsing {}...".format(f))
         try:
-            insert(results, m, session)
+            metadata = all_metadata[results.filename]
+        except:
+            log.error("No metadata for {}".format(results.filename))
+        try:
+            insert(results, m, session, metadata)
         except:
             pass
             #seems like uninformative error message
             #log.error("Error in insert for {}...".format(f))
 
-# parse and load metadata
+# parse and load metrics & metadata
 def parse(d, m, session, build_ref):
     # parse and load metadata
     for module in d['files']:
         directory = module['directory']
+        with open(module['metadata'], 'r') as io:
+            all_metadata = yaml.load(io, Loader=yaml.FullLoader)
 
         refs = m.tables['reference']
 
         if module['name'] == 'fastqc':
-            dispatch_parse(directory, 'fastqc', '*_fastqc.zip', fastqcParser, session, m, refs, build_ref)
+            dispatch_parse(directory, 'fastqc', '*_fastqc.zip', fastqcParser, session, m, refs, build_ref, all_metadata)
         elif module['name'] == 'qckitfastq':
-            dispatch_parse(directory, 'qckitfastq', '*.csv', qckitfastqParser, session, m, refs, build_ref)
+            dispatch_parse(directory, 'qckitfastq', '*.csv', qckitfastqParser, session, m, refs, build_ref, all_metadata)
         elif module['name'] == 'picardtools':
-            dispatch_parse(directory, 'picardtools', '*.txt', picardtoolsParser, session, m, refs, build_ref)
-
+            dispatch_parse(directory, 'picardtools', '*.txt', picardtoolsParser, session, m, refs, build_ref, all_metadata)
 
 def main(config, build_ref):
     # Load load.yaml file

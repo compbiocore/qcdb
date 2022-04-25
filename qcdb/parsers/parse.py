@@ -17,17 +17,20 @@ class BaseParser(object):
     def __init__(self, file_handle, qc_program, session, ref_table, build_ref):
         self.metrics = []
         self.qc_program = qc_program
-        base_file = os.path.basename(file_handle)
-        sample, experiment, read_type = self.get_metadata(base_file)
-        self.db_id = self.db_id(sample, experiment)
-        self.sample_id = sample
-        self.experiment = experiment
-        self.read_type = read_type # 0, 1 or 2
+
+        self.filename = os.path.splitext(os.path.basename(file_handle))[0]
+        #base_file = os.path.basename(file_handle)
+        #sample, experiment, read_type = self.get_metadata(base_file)
+        #self.db_id = self.db_id(sample, experiment)
+        #self.sample_id = sample
+        #self.experiment = experiment
+        #self.read_type = read_type # 0, 1 or 2
         self.session = session
         self.ref_table = ref_table
         self.build_ref = build_ref
         self.ref_map = self.get_reference_map()
 
+"""     # can pull out metadata here
     def get_metadata(self, base_file):
         sample=base_file.split('_')[0]
         experiment=base_file.split('_')[1]
@@ -39,10 +42,10 @@ class BaseParser(object):
 
         return (sample,
                 experiment,
-                read_type)
+                read_type) """
 
-    def db_id(self, sample, experiment):
-        return(sample+'_'+experiment)
+"""     def db_id(self, sample, experiment):
+        return(sample+'_'+experiment) """
 
     # get the reference map for this qc_program (e.g. {kmercount: {long_name: l}})
     def get_reference_map(self):
