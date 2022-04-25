@@ -35,7 +35,7 @@ class fastqcParser(BaseParser):
         lines = zp.open(zp.namelist()[results_idx]).readlines()
 
         module_end_idx = [i for i, item in enumerate(lines) if re.search('^>>END_MODULE', item.decode('utf-8'))]
-        module_start_idx = [2]
+        module_start_idx = [1]
         module_start_idx_0 = [i+1 for i in module_end_idx]
         module_start_idx.extend(module_start_idx_0)
         metrics = modules(module_start_idx[:-1],lines)
@@ -97,7 +97,9 @@ def modules(start, lines):
     #  '>>Kmer Content\tfail\n']
     modules = []
     for i in start:
-        if lines[i].decode('utf-8').startswith(">>Per base sequence quality"):
+        if lines[i].decode('utf-8').startswith(">>Basic Statistics"):
+            modules.append('bstats')
+        elif lines[i].decode('utf-8').startswith(">>Per base sequence quality"):
             modules.append('basequal')
         elif lines[i].decode('utf-8').startswith(">>Per tile"):
             modules.append('tilequal')
