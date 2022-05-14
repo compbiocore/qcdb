@@ -17,6 +17,7 @@ pandas = "*"
 mysql-connector-python = "*"
 biopython = "*"
 xmljson = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.7"

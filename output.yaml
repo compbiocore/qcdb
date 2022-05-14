@@ -1,0 +1,144 @@
+- sample_id: H1-sc-1
+  experiment_id: null
+  library_name: null
+  library_strategy: RNA-Seq
+  library_source: TRANSCRIPTOMIC
+  library_selection: Oligo-DT
+  library_layout: PAIRED
+  platform: ILLUMINA
+  instrument_model: Illumina HiSeq 4000
+  sra_ids: none
+  run_ids: none
+  run_center: Array Star
+  project_id: null
+  taxon_id: 9606
+  scientific_name: Homo sapiens
+  published: null
+  spots: null
+  bases: null
+  experiment_name: null
+  study_type: null
+  center_project_name: null
+  submission_center: null
+  submission_lab: null
+  db_id: H1-sc-19606
+- sample_id: H1-sc-2
+  experiment_id: null
+  library_name: null
+  library_strategy: RNA-Seq
+  library_source: TRANSCRIPTOMIC
+  library_selection: Oligo-DT
+  library_layout: PAIRED
+  platform: ILLUMINA
+  instrument_model: Illumina HiSeq 4000
+  sra_ids: none
+  run_ids: none
+  run_center: Array Star
+  project_id: null
+  taxon_id: 9606
+  scientific_name: Homo sapiens
+  published: null
+  spots: null
+  bases: null
+  experiment_name: null
+  study_type: null
+  center_project_name: null
+  submission_center: null
+  submission_lab: null
+  db_id: H1-sc-29606
+- sample_id: H1-sc-3
+  experiment_id: null
+  library_name: null
+  library_strategy: RNA-Seq
+  library_source: TRANSCRIPTOMIC
+  library_selection: Oligo-DT
+  library_layout: PAIRED
+  platform: ILLUMINA
+  instrument_model: Illumina HiSeq 4000
+  sra_ids: none
+  run_ids: none
+  run_center: Array Star
+  project_id: null
+  taxon_id: 9606
+  scientific_name: Homo sapiens
+  published: null
+  spots: null
+  bases: null
+  experiment_name: null
+  study_type: null
+  center_project_name: null
+  submission_center: null
+  submission_lab: null
+  db_id: H1-sc-39606
+- sample_id: HFD-WT-1
+  experiment_id: null
+  library_name: null
+  library_strategy: RNA-Seq
+  library_source: TRANSCRIPTOMIC
+  library_selection: Oligo-DT
+  library_layout: PAIRED
+  platform: ILLUMINA
+  instrument_model: Illumina HiSeq 4000
+  sra_ids: none
+  run_ids: none
+  run_center: Array Star
+  project_id: null
+  taxon_id: 10090
+  scientific_name: Mus musculus
+  published: null
+  spots: null
+  bases: null
+  experiment_name: null
+  study_type: null
+  center_project_name: null
+  submission_center: null
+  submission_lab: null
+  db_id: HFD-WT-110090
+- sample_id: HFD-WT-2
+  experiment_id: null
+  library_name: null
+  library_strategy: RNA-Seq
+  library_source: TRANSCRIPTOMIC
+  library_selection: Oligo-DT
+  library_layout: PAIRED
+  platform: ILLUMINA
+  instrument_model: Illumina HiSeq 4000
+  sra_ids: none
+  run_ids: none
+  run_center: Array Star
+  project_id: null
+  taxon_id: 10090
+  scientific_name: Mus musculus
+  published: null
+  spots: null
+  bases: null
+  experiment_name: null
+  study_type: null
+  center_project_name: null
+  submission_center: null
+  submission_lab: null
+  db_id: HFD-WT-210090
+- sample_id: HFD-WT-3
+  experiment_id: null
+  library_name: null
+  library_strategy: RNA-Seq
+  library_source: TRANSCRIPTOMIC
+  library_selection: Oligo-DT
+  library_layout: PAIRED
+  platform: ILLUMINA
+  instrument_model: Illumina HiSeq 4000
+  sra_ids: none
+  run_ids: none
+  run_center: Array Star
+  project_id: null
+  taxon_id: 10090
+  scientific_name: Mus musculus
+  published: null
+  spots: null
+  bases: null
+  experiment_name: null
+  study_type: null
+  center_project_name: null
+  submission_center: null
+  submission_lab: null
+  db_id: HFD-WT-310090

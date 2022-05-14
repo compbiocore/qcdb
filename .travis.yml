@@ -1,19 +1,30 @@
-language: python
-dist: trusty
-os:
-  - linux
-sudo: required
-python:
-  - "3.6"
+#language: python
+#dist: trusty
+#os:
+ # - linux
+#sudo: required
+#python:
+ # - "3.6"
 
-services:
-  - docker
+#services:
+ # - docker
 
-before_script:
-  - sudo service mysql stop
+#before_script:
+ # - sudo service mysql stop
 
-script:
-  - docker-compose run test
+#script:
+ # - docker-compose run test
 
-after_success:
-  - docker-compose run coverage
+#after_success:
+ # - docker-compose run coverage
+
+
+import pandas as pd 
+def Load_Data(file_name):
+    with open(file_name, 'r') as file:
+        data_df = pd.read_csv(file)
+    return data_df
+file_name = "D:/Desktop/qcviz_shiny/samplemeta.csv"
+data = Load_Data(file_name) 
+for r in data.index:
+  print(data.iloc[r])

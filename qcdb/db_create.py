@@ -25,6 +25,7 @@ parser.add_argument('--file', '-f', help='Location of params.yaml', default='par
 # columns are organized by how they are found in sra_metadata.py
 def tables(metadata):
     samplemeta = Table('samplemeta', metadata,
+        Column('id',Integer,primary_key = True, nullable = False, autoincrement=True)
         Column('db_id', String(50), primary_key=True), # formerly sample_id for db
         Column('sample_id', String(50), nullable=False), # = sample_id from SRA
         Column('experiment_id', String(50)), # = experiment_id from SRA
@@ -106,8 +107,7 @@ def main(config):
                                             params['port'],
                                             db))
     except:
-        db_create(params,db)
-        conn = connection(params=params,db=db)
+        print('failed')
 
     # Init metadata
     log.info("Making tables...")

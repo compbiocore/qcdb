@@ -1,8 +1,8 @@
 import sqlalchemy
 
 def connection(params={'user':'root',
-                       'password':'arc_ccv_cbc_2022',
-                       'host':'tdatascicit.services.brown.edu',
+                       'password':'password',
+                       'host':'0.0.0.0',
                        'port': '3306',
                       },
                db=False):
