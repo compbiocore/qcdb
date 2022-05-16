@@ -29,6 +29,12 @@ parser.add_argument('--buildref', '-r', help='Flag to build reference table from
 
 def insert(results, m, session, metadata):
     s = m.tables['samplemeta']
+    if not metadata["db_id"]: # if db_id is NOT filled out in metadata sheet
+        id = session.query(s).lastrowid
+        db_id = "INTERNAL" + id
+        log.info("No db_id in metadata, assigning {}".format(db_id))
+        metadata["db_id"] = db_id
+        session.execute(s.insert().values(db_id=db_id))
     # check if db_id is in table already
     q = session.query(s).filter(s.c.db_id==results.db_id)
     if not session.query(q.exists()).scalar():
@@ -91,6 +97,10 @@ def parse(d, m, session, build_ref):
             dispatch_parse(directory, 'qckitfastq', '*.csv', qckitfastqParser, session, m, refs, build_ref, all_metadata)
         elif module['name'] == 'picardtools':
             dispatch_parse(directory, 'picardtools', '*.txt', picardtoolsParser, session, m, refs, build_ref, all_metadata)
+
+        # write new metadata
+        with open(module['metadata'], 'w') as io:
+            yaml.dump(all_metadata, io)
 
 def main(config, build_ref):
     # Load load.yaml file
