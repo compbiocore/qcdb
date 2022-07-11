@@ -14,7 +14,7 @@ def test_fastqcparser(session, metadata):
 	assert(isinstance(r, fastqcParser))
 	assert(r.sample_id.startswith('SRS'))
 	assert(r.experiment.startswith('SRX'))
-	assert(len(r.metrics)==11)
+	assert(len(r.metrics)==12)
 
 	# test that the reference table updated with minified values
 	count = 0
@@ -29,14 +29,14 @@ def test_fastqcparser_notilequal(session, metadata):
 	assert(isinstance(r, fastqcParser))
 	assert(r.sample_id.startswith('SRS'))
 	assert(r.experiment.startswith('SRX'))
-	assert(len(r.metrics)==10)
+	assert(len(r.metrics)==11)
 
 def test_fastqcparser_notile_nooverrep(session, metadata):
 	r = fastqcParser(os.path.join(dirname, 'data', 'SRS4807083_SRX5884553_2_fastqc.zip'), session, metadata.tables['reference'], True)
 	assert(isinstance(r, fastqcParser))
 	assert(r.sample_id.startswith('SRS'))
 	assert(r.experiment.startswith('SRX'))
-	assert(len(r.metrics)==9)	
+	assert(len(r.metrics)==10)
 
 def test_qckitfastqparser(session, metadata):
 	results = qckitfastqParser(os.path.join(dirname, 'data', 'SRS643403_SRX612437_overrep_kmer.csv'), session, metadata.tables['reference'], True)
