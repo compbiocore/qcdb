@@ -38,7 +38,7 @@ class fastqcParser(BaseParser):
         module_start_idx = [1] #get rid of the last one
         module_start_idx_0 = [i+1 for i in module_end_idx]
         module_start_idx.extend(module_start_idx_0)
-        module_start_idx = module_start_idx[:-1]
+        #module_start_idx = module_start_idx[:-1]
         metrics = modules(module_start_idx[:-1],lines)
 
         for start, end, module in zip(module_start_idx[:-1], module_end_idx[1:], metrics):
