@@ -1,6 +1,4 @@
-FROM python:3.7
-
-#RUN  unset -v PYTHONPATH
+FROM python:3
 
 ADD . /usr/src
 WORKDIR /usr/src
