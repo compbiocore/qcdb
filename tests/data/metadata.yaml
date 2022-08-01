@@ -1,5 +1,4 @@
-db_id: 
-  sample_id: H1-sc-1
+H1-sc-1:
   experiment_id: 
   library_name: 
   library_strategy: RNA-Seq
@@ -22,8 +21,7 @@ db_id:
   center_project_name: 
   submission_center: 
   submission_lab: 
-db_id: 
-  sample_id: H1-sc-2
+H1-sc-2:
   experiment_id: 
   library_name: 
   library_strategy: RNA-Seq
@@ -46,8 +44,7 @@ db_id:
   center_project_name: 
   submission_center: 
   submission_lab: 
-db_id: 
-  sample_id: H1-sc-3
+H1-sc-3:
   experiment_id: 
   library_name: 
   library_strategy: RNA-Seq
@@ -70,8 +67,7 @@ db_id:
   center_project_name: 
   submission_center: 
   submission_lab: 
-db_id:
-  sample_id: HFD-WT-1
+HFD-WT-1:
   experiment_id: 
   library_name: 
   library_strategy: RNA-Seq
@@ -94,8 +90,7 @@ db_id:
   center_project_name: 
   submission_center: 
   submission_lab: 
-db_id:
-  sample_id: HFD-WT-2
+HFD-WT-2:
   experiment_id: 
   library_name: 
   library_strategy: RNA-Seq
@@ -118,8 +113,7 @@ db_id:
   center_project_name: 
   submission_center: 
   submission_lab: 
-db_id:
-  sample_id: HFD-WT-3
+HFD-WT-3:
   experiment_id: 
   library_name: 
   library_strategy: RNA-Seq
