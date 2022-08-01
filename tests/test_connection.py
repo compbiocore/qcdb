@@ -5,8 +5,8 @@ import pytest
 import subprocess
 import time
 
-from dotenv import load_dotenv
-load_dotenv()
+#from dotenv import load_dotenv
+#load_dotenv()
 
 
 @pytest.fixture

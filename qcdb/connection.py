@@ -17,8 +17,13 @@ def connection(params={'user':'root',
         engine = sqlalchemy.create_engine(url)
         con = engine.connect()
     except:
-        url = sqlalchemy.engine.url.URL('mysql+mysqlconnector', username=params['user'], password=params['password'], host=params['host'], port=params['port'], database=params['db'], query={'auth_plugin': 'mysql_clear_password'})
-        engine = sqlalchemy.create_engine(url)
-        con = engine.connect()
+        try:
+            url = sqlalchemy.engine.url.URL('mysql+mysqlconnector', username=params['user'], password=params['password'], host=params['host'], port=params['port'], database=params['db'], query={'auth_plugin': 'mysql_clear_password'})
+            engine = sqlalchemy.create_engine(url)
+            con = engine.connect()
+        except: # for mariadb connection due to mysql docker image not working for M1
+            url = sqlalchemy.engine.url.URL('mariadb+mariadbconnector', username=params['user'], password=params['password'], host = params['host'], port=params['port'], database=params['db'])
+            engine = sqlalchemy.create_engine(url)
+            con = engine.connect()
 
     return con
