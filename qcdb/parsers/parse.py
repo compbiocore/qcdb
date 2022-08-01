@@ -30,22 +30,22 @@ class BaseParser(object):
         self.build_ref = build_ref
         self.ref_map = self.get_reference_map()
 
-"""     # can pull out metadata here
-    def get_metadata(self, base_file):
-        sample=base_file.split('_')[0]
-        experiment=base_file.split('_')[1]
-        read_type=base_file.split('_')[2]
-        if read_type[0].isalpha(): # single-end
-            read_type = 0
-        else:
-            read_type = int(read_type) # should be 1 or 2
+#     # can pull out metadata here
+#    def get_metadata(self, base_file):
+#        sample=base_file.split('_')[0]
+#        experiment=base_file.split('_')[1]
+#        read_type=base_file.split('_')[2]
+#        if read_type[0].isalpha(): # single-end
+#            read_type = 0
+#        else:
+#            read_type = int(read_type) # should be 1 or 2#
 
-        return (sample,
-                experiment,
-                read_type) """
+#        return (sample,
+#                experiment,
+#                read_type)
 
-"""     def db_id(self, sample, experiment):
-        return(sample+'_'+experiment) """
+    #def db_id(self, sample, experiment):
+    #    return(sample+'_'+experiment)
 
     # get the reference map for this qc_program (e.g. {kmercount: {long_name: l}})
     def get_reference_map(self):

@@ -25,8 +25,8 @@ parser.add_argument('--file', '-f', help='Location of params.yaml', default='par
 # columns are organized by how they are found in sra_metadata.py
 def tables(metadata):
     samplemeta = Table('samplemeta', metadata,
-        Column('_id', Integer, primary_key=True, autoincrement=True)
-        Column('db_id', String(50)), # formerly sample_id for db
+        Column('_id', Integer, primary_key=True, autoincrement=True),
+        Column('db_id', String(50), primary_key=True, unique=True), # formerly sample_id for db
         Column('sample_id', String(50), nullable=False), # = sample_id from SRA
         Column('experiment_id', String(50)), # = experiment_id from SRA
         Column('library_name', String(50)), #
@@ -63,7 +63,8 @@ def tables(metadata):
 
     metrics = Table('metrics', metadata,
         Column('_id', Integer, primary_key=True),
-        Column('db_id', String(50), ForeignKey('samplemeta.db_id')),
+        Column('samplemeta_id', Integer),
+        Column('db_id', String(50)),
         Column('qc_program', String(50)),
         Column('qc_metric', String(50)),
         Column('read_type', Integer),

@@ -35,18 +35,18 @@ def insert(results, m, session, metadata):
         log.info("No db_id in metadata, assigning {}".format(db_id))
         metadata["db_id"] = db_id
         session.execute(s.insert().values(db_id=db_id))
+        
     # check if db_id is in table already
     q = session.query(s).filter(s.c.db_id==results.db_id)
     if not session.query(q.exists()).scalar():
         log.info("Loading {} into metadata...".format(results.db_id))
-        metadata = metadata(results.db_id)
 
         #sra_m = sra_metadata(results.db_id)
         #sra_m['db_id'] = results.db_id
         #sra_m['sample_id'] = results.sample_id
         #sra_m['experiment_id'] = results.experiment
         try:
-            session.execute(s.insert().values(sra_m))
+            session.execute(s.insert().values(metadata))
             session.commit()
         except:
             log.error("Error of type: ", sys.exc_info()[0], sys.exc_info()[1])
@@ -59,7 +59,7 @@ def insert(results, m, session, metadata):
         session.commit()
     except:
         log.error('Data already exists for {}'.format(results.db_id))
-        raise Exception("Data already exists")
+        raise Exception("Data already exists")  
 
 def dispatch_parse(directory, module_name, module_glob, module_fn, session, m, refs, build_ref, all_metadata):
     files = glob2.glob(os.path.join(directory, module_glob))
