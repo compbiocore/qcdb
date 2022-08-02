@@ -20,7 +20,7 @@ def dir_path(string):
     if os.path.isdir(string):
         return string
     else:
-        print("This is NOT a valid directory")
+        print("One of your arguments is NOT a valid directory")
         sys.exit() 
     
 parser = argparse.ArgumentParser()
@@ -82,7 +82,7 @@ class sra_dump(object):
         return result_update
 
 # Function for parsing data folder and querying SRA 
-def create_metadata(input_path, output_path): # later add output path where meta.yaml file will be saved as argument 
+def create_metadata(input_path, output_path): 
     # Step 1: First get all folder elements and make them unique 
     folder_ids = os.listdir(input_path) # get list of all elements in folder - make sure to only get .zip files later 
     woduplicates = set(folder_ids) # remove duplicates
@@ -195,4 +195,4 @@ def empty_metadata():
 
 # Testing the function that creates metadata.yaml file 
 create_metadata(args.input_directory, args.output_directory)
-# Example use from command line: python3 metadata.py -in /Users/jordan/Desktop/test_data -out /Users/jordan/Desktop
+# Example use from command line: python3 new_metadata.py -in /Users/jordan/Desktop/Projects/qcdb/test_data -out /Users/jordan/Desktop    
